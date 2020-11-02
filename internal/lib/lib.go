@@ -15,6 +15,7 @@
 package lib
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -221,15 +222,6 @@ func GetTenant() string {
 	// }
 	tenant := utils.ADMIN_NS
 	return tenant
-}
-
-func GetIngressApi() string {
-	ingressApi := os.Getenv(INGRESS_API)
-	ingressApi, ok := IngressApiMap[ingressApi]
-	if !ok {
-		return utils.CoreV1IngressInformer
-	}
-	return ingressApi
 }
 
 func GetShardScheme() string {
@@ -447,7 +439,7 @@ func InformersToRegister(oclient *oshiftclient.Clientset, kclient *kubernetes.Cl
 		allInformers = append(allInformers, utils.NodeInformer)
 
 		informerTimeout := int64(120)
-		_, err := oclient.RouteV1().Routes("").List(metav1.ListOptions{TimeoutSeconds: &informerTimeout})
+		_, err := oclient.RouteV1().Routes("").List(context.TODO(), metav1.ListOptions{TimeoutSeconds: &informerTimeout})
 		if err == nil {
 			// Openshift cluster with route support, we will just add route informer
 			allInformers = append(allInformers, utils.RouteInformer)

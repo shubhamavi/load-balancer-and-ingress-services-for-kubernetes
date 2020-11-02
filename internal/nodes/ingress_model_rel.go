@@ -27,7 +27,7 @@ import (
 	routev1 "github.com/openshift/api/route/v1"
 	advl4v1alpha1pre1 "github.com/vmware-tanzu/service-apis/apis/v1alpha1pre1"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/api/networking/v1beta1"
+	networkingv1 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 )
 
@@ -254,7 +254,7 @@ func IngressChanges(ingName string, namespace string, key string) ([]string, boo
 	} else {
 		ingObj, ok := utils.ToNetworkingIngress(myIng)
 		if !ok {
-			utils.AviLog.Errorf("Unable to convert obj type interface to networking/v1beta1 ingress")
+			utils.AviLog.Errorf("Unable to convert obj type interface to networking/v1 ingress")
 		}
 
 		// simple validator check for duplicate hostpaths, logs Warning if duplicates found
@@ -501,19 +501,19 @@ func HTTPRuleToIng(rrname string, namespace string, key string) ([]string, bool)
 	return allIngresses, true
 }
 
-func parseServicesForIngress(ingSpec v1beta1.IngressSpec, key string) []string {
+func parseServicesForIngress(ingSpec networkingv1.IngressSpec, key string) []string {
 	// Figure out the service names that are part of this ingress
 	var services []string
 	for _, rule := range ingSpec.Rules {
 		for _, path := range rule.IngressRuleValue.HTTP.Paths {
-			services = append(services, path.Backend.ServiceName)
+			services = append(services, path.Backend.Service.Name)
 		}
 	}
 	utils.AviLog.Debugf("key: %s, msg: total services retrieved  from corev1:  %s", key, services)
 	return services
 }
 
-func parseSecretsForIngress(ingSpec v1beta1.IngressSpec, key string) []string {
+func parseSecretsForIngress(ingSpec networkingv1.IngressSpec, key string) []string {
 	// Figure out the service names that are part of this ingress
 	var secrets []string
 	for _, tlsSettings := range ingSpec.TLS {
@@ -556,7 +556,7 @@ func parseGatewayForListeners(gateway *advl4v1alpha1pre1.Gateway, key string) []
 	return listeners
 }
 
-func filterIngressOnClass(ingress *v1beta1.Ingress) bool {
+func filterIngressOnClass(ingress *networkingv1.Ingress) bool {
 	// If Avi is not the default ingress, then filter on ingress class.
 	if !lib.GetDefaultIngController() {
 		annotations := ingress.GetAnnotations()

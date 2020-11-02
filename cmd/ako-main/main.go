@@ -29,7 +29,7 @@ import (
 	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	oshiftclient "github.com/openshift/client-go/route/clientset/versioned"
-	advl4 "github.com/vmware-tanzu/service-apis/pkg/client/clientset/versioned"
+	advl4 "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/clientset/versioned"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"

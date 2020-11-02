@@ -15,6 +15,7 @@
 package cache
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -2473,7 +2474,7 @@ func checkRequiredValuesYaml() bool {
 	if lib.GetNamespaceToSync() != "" {
 		aviCMNamespace = lib.GetNamespaceToSync()
 	}
-	_, err := k8sClient.CoreV1().ConfigMaps(aviCMNamespace).Get(lib.AviConfigMap, metav1.GetOptions{})
+	_, err := k8sClient.CoreV1().ConfigMaps(aviCMNamespace).Get(context.TODO(), lib.AviConfigMap, metav1.GetOptions{})
 	if err != nil {
 		utils.AviLog.Errorf("Configmap %s/%s not found, error: %v, syncing will be disabled", aviCMNamespace, lib.AviConfigMap, err)
 		return false

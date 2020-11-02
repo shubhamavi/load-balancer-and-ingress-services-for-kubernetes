@@ -23,7 +23,7 @@ import (
 	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	routev1 "github.com/openshift/api/route/v1"
-	"k8s.io/api/networking/v1beta1"
+	networkingv1 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
@@ -56,7 +56,7 @@ func (v *Validator) IsValiddHostName(hostname string) bool {
 	return false
 }
 
-func validateSpecFromHostnameCache(key, ns, ingName string, ingSpec v1beta1.IngressSpec) {
+func validateSpecFromHostnameCache(key, ns, ingName string, ingSpec networkingv1.IngressSpec) {
 	nsIngress := ns + "/" + ingName
 	for _, rule := range ingSpec.Rules {
 		for _, svcPath := range rule.IngressRuleValue.HTTP.Paths {
@@ -112,7 +112,7 @@ func sslKeyCertHostRulePresent(key, host string) (bool, string) {
 
 // ParseHostPathForIngress handling for hostrule: if the host has a hostrule, and that hostrule has a tls.sslkeycertref then
 // move that host in the tls.hosts, this should be only in case of hostname sharding
-func (v *Validator) ParseHostPathForIngress(ns string, ingName string, ingSpec v1beta1.IngressSpec, key string) IngressConfig {
+func (v *Validator) ParseHostPathForIngress(ns string, ingName string, ingSpec networkingv1.IngressSpec, key string) IngressConfig {
 	// Figure out the service names that are part of this ingress
 
 	ingressConfig := IngressConfig{}
@@ -161,9 +161,9 @@ func (v *Validator) ParseHostPathForIngress(ns string, ingName string, ingSpec v
 		for _, path := range rule.IngressRuleValue.HTTP.Paths {
 			hostPathMapSvc := IngressHostPathSvc{
 				Path:        path.Path,
-				ServiceName: path.Backend.ServiceName,
-				Port:        path.Backend.ServicePort.IntVal,
-				PortName:    path.Backend.ServicePort.StrVal,
+				ServiceName: path.Backend.Service.Name,
+				Port:        path.Backend.Service.Port.Number,
+				PortName:    path.Backend.Service.Port.Name,
 			}
 			if hostPathMapSvc.Port == 0 {
 				// Default to port 80 if not set in the ingress object
