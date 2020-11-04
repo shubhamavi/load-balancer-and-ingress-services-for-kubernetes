@@ -19,10 +19,10 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/status"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/status"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	routev1 "github.com/openshift/api/route/v1"
 	oshiftclient "github.com/openshift/client-go/route/clientset/versioned"
@@ -164,7 +164,7 @@ func AddRouteEventHandler(numWorkers uint32, c *AviController) cache.ResourceEve
 				status.UpdateRouteStatusWithErrMsg(route.Name, namespace, lib.DuplicateBackends)
 			}
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: ADD", key)
+			utils.AviLog.Infof("key: %s, msg: ADD", key)
 		},
 		DeleteFunc: func(obj interface{}) {
 			if c.DisableSync {
@@ -187,7 +187,7 @@ func AddRouteEventHandler(numWorkers uint32, c *AviController) cache.ResourceEve
 			key := utils.OshiftRoute + "/" + utils.ObjKey(route)
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: DELETE", key)
+			utils.AviLog.Infof("key: %s, msg: DELETE", key)
 		},
 		UpdateFunc: func(old, cur interface{}) {
 			if c.DisableSync {
@@ -203,7 +203,7 @@ func AddRouteEventHandler(numWorkers uint32, c *AviController) cache.ResourceEve
 					status.UpdateRouteStatusWithErrMsg(newRoute.Name, namespace, lib.DuplicateBackends)
 				}
 				c.workqueue[bkt].AddRateLimited(key)
-				utils.AviLog.Debugf("key: %s, msg: UPDATE", key)
+				utils.AviLog.Infof("key: %s, msg: UPDATE", key)
 			}
 		},
 	}
@@ -234,7 +234,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := utils.Endpoints + "/" + utils.ObjKey(ep)
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: ADD", key)
+			utils.AviLog.Infof("key: %s, msg: ADD", key)
 		},
 		DeleteFunc: func(obj interface{}) {
 			if c.DisableSync {
@@ -262,7 +262,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := utils.Endpoints + "/" + utils.ObjKey(ep)
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: DELETE", key)
+			utils.AviLog.Infof("key: %s, msg: DELETE", key)
 		},
 		UpdateFunc: func(old, cur interface{}) {
 			if c.DisableSync {
@@ -279,7 +279,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 				key := utils.Endpoints + "/" + utils.ObjKey(cep)
 				bkt := utils.Bkt(namespace, numWorkers)
 				c.workqueue[bkt].AddRateLimited(key)
-				utils.AviLog.Debugf("key: %s, msg: UPDATE", key)
+				utils.AviLog.Infof("key: %s, msg: UPDATE", key)
 			}
 		},
 	}
@@ -306,7 +306,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			}
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: ADD", key)
+			utils.AviLog.Infof("key: %s, msg: ADD", key)
 		},
 		DeleteFunc: func(obj interface{}) {
 			if c.DisableSync {
@@ -339,7 +339,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			}
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: DELETE", key)
+			utils.AviLog.Infof("key: %s, msg: DELETE", key)
 		},
 		UpdateFunc: func(old, cur interface{}) {
 			if c.DisableSync {
@@ -366,7 +366,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 
 				bkt := utils.Bkt(namespace, numWorkers)
 				c.workqueue[bkt].AddRateLimited(key)
-				utils.AviLog.Debugf("key: %s, msg: UPDATE", key)
+				utils.AviLog.Infof("key: %s, msg: UPDATE", key)
 			}
 		},
 	}
@@ -457,10 +457,11 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 
 	ingressEventHandler := cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
+			utils.AviLog.Infof("CHAUHAN")
 			if c.DisableSync {
 				return
 			}
-			ingress, ok := utils.ToNetworkingIngress(obj)
+			ingress, ok := utils.ToNetworkingV1Ingress(obj)
 			if !ok {
 				utils.AviLog.Errorf("Unable to convert obj type interface to networking/v1beta1 ingress")
 			}
@@ -469,13 +470,16 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := utils.Ingress + "/" + utils.ObjKey(ingress)
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: ADD", key)
+			utils.AviLog.Infof("key: %s, msg: ADD", key)
 		},
 		DeleteFunc: func(obj interface{}) {
+			
+			utils.AviLog.Infof("CHAUHAN")
+
 			if c.DisableSync {
 				return
 			}
-			ingress, ok := utils.ToNetworkingIngress(obj)
+			ingress, ok := utils.ToNetworkingV1Ingress(obj)
 			if !ok {
 				// ingress was deleted but its final state is unrecorded.
 				tombstone, ok := obj.(cache.DeletedFinalStateUnknown)
@@ -493,14 +497,14 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := utils.Ingress + "/" + utils.ObjKey(ingress)
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: DELETE", key)
+			utils.AviLog.Infof("key: %s, msg: DELETE", key)
 		},
 		UpdateFunc: func(old, cur interface{}) {
 			if c.DisableSync {
 				return
 			}
-			oldobj, okOld := utils.ToNetworkingIngress(old)
-			ingress, okNew := utils.ToNetworkingIngress(cur)
+			oldobj, okOld := utils.ToNetworkingV1Ingress(old)
+			ingress, okNew := utils.ToNetworkingV1Ingress(cur)
 			if !okOld || !okNew {
 				utils.AviLog.Errorf("Unable to convert obj type interface to networking/v1beta1 ingress")
 			}
@@ -510,7 +514,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 				key := utils.Ingress + "/" + utils.ObjKey(ingress)
 				bkt := utils.Bkt(namespace, numWorkers)
 				c.workqueue[bkt].AddRateLimited(key)
-				utils.AviLog.Debugf("key: %s, msg: UPDATE", key)
+				utils.AviLog.Infof("key: %s, msg: UPDATE", key)
 			}
 		},
 	}
@@ -525,7 +529,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := "Secret" + "/" + utils.ObjKey(secret)
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: ADD", key)
+			utils.AviLog.Infof("key: %s, msg: ADD", key)
 		},
 		DeleteFunc: func(obj interface{}) {
 			if c.DisableSync {
@@ -548,7 +552,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := "Secret" + "/" + utils.ObjKey(secret)
 			bkt := utils.Bkt(namespace, numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: DELETE", key)
+			utils.AviLog.Infof("key: %s, msg: DELETE", key)
 		},
 		UpdateFunc: func(old, cur interface{}) {
 			if c.DisableSync {
@@ -562,7 +566,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 				key := "Secret" + "/" + utils.ObjKey(secret)
 				bkt := utils.Bkt(namespace, numWorkers)
 				c.workqueue[bkt].AddRateLimited(key)
-				utils.AviLog.Debugf("key: %s, msg: UPDATE", key)
+				utils.AviLog.Infof("key: %s, msg: UPDATE", key)
 			}
 		},
 	}
@@ -576,7 +580,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := utils.NodeObj + "/" + node.Name
 			bkt := utils.Bkt(lib.GetTenant(), numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: ADD", key)
+			utils.AviLog.Infof("key: %s, msg: ADD", key)
 		},
 		DeleteFunc: func(obj interface{}) {
 			if c.DisableSync {
@@ -598,7 +602,7 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			key := utils.NodeObj + "/" + node.Name
 			bkt := utils.Bkt(lib.GetTenant(), numWorkers)
 			c.workqueue[bkt].AddRateLimited(key)
-			utils.AviLog.Debugf("key: %s, msg: DELETE", key)
+			utils.AviLog.Infof("key: %s, msg: DELETE", key)
 		},
 		UpdateFunc: func(old, cur interface{}) {
 			if c.DisableSync {
@@ -610,9 +614,9 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 			if isNodeUpdated(oldobj, node) {
 				bkt := utils.Bkt(lib.GetTenant(), numWorkers)
 				c.workqueue[bkt].AddRateLimited(key)
-				utils.AviLog.Debugf("key: %s, msg: UPDATE", key)
+				utils.AviLog.Infof("key: %s, msg: UPDATE", key)
 			} else {
-				utils.AviLog.Debugf("key: %s, msg: node object did not change\n", key)
+				utils.AviLog.Infof("key: %s, msg: node object did not change\n", key)
 			}
 		},
 	}

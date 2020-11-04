@@ -1,10 +1,8 @@
-module github.com/vmware/load-balancer-and-ingress-services-for-kubernetes
+module github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes
 
 require (
-	github.com/Azure/go-autorest v11.1.2+incompatible // indirect
 	github.com/Masterminds/semver v1.5.0
 	github.com/avinetworks/sdk v0.0.0-20200910070359-d9ffda19a7dd
-	github.com/coreos/etcd v3.3.25+incompatible // indirect
 	github.com/davecgh/go-spew v1.1.1
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/gorilla/mux v1.7.4

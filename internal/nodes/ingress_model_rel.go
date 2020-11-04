@@ -19,10 +19,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	routev1 "github.com/openshift/api/route/v1"
 	advl4v1alpha1pre1 "github.com/vmware-tanzu/service-apis/apis/v1alpha1pre1"
@@ -252,7 +252,7 @@ func IngressChanges(ingName string, namespace string, key string) ([]string, boo
 			objects.SharedSvcLister().IngressMappings(namespace).RemoveIngressMappings(ingName)
 		}
 	} else {
-		ingObj, ok := utils.ToNetworkingIngress(myIng)
+		ingObj, ok := utils.ToNetworkingV1Ingress(myIng)
 		if !ok {
 			utils.AviLog.Errorf("Unable to convert obj type interface to networking/v1 ingress")
 		}

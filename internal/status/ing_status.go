@@ -20,8 +20,8 @@ import (
 	"errors"
 	"strings"
 
-	avicache "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	avicache "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	corev1 "k8s.io/api/core/v1"
 	networking "k8s.io/api/networking/v1"
@@ -169,7 +169,7 @@ func deleteObject(svc_mdata_obj avicache.ServiceMetadataObj, key string, isVSDel
 		return err
 	}
 
-	mIngress, ok := utils.ToNetworkingIngress(ingObj)
+	mIngress, ok := utils.ToNetworkingV1Ingress(ingObj)
 	if !ok {
 		utils.AviLog.Errorf("Unable to convert obj type interface to networking/v1beta1 ingress")
 	}
@@ -282,7 +282,7 @@ func getIngresses(ingressNSNames []string, bulk bool, retryNum ...int) map[strin
 			continue
 		}
 
-		mIngress, ok := utils.ToNetworkingIngress(ingObj)
+		mIngress, ok := utils.ToNetworkingV1Ingress(ingObj)
 		if !ok {
 			utils.AviLog.Warn("Unable to convert obj type interface to networking/v1beta1 ingress")
 			continue

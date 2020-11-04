@@ -188,9 +188,18 @@ func instantiateInformers(kubeClient KubeClientIntf, registeredInformers []strin
 		case ConfigMapInformer:
 			informers.ConfigMapInformer = configMapInformerFactory.Core().V1().ConfigMaps()
 		case IngressInformer:
-			inginformer, _ := kubeInformerFactory.ForResource(NetworkingIngress)
-			informers.IngressInformer = inginformer
-			informers.IngressVersion = CoreV1IngressInformer
+			ingressApi := "v1beta1"
+			if ingressApi == "v1beta1" {
+				utils.AviLog.Error("HERE BETA")
+				inginformer, _ := kubeInformerFactory.ForResource(NetworkingV1beta1Ingress)
+				informers.IngressInformer = inginformer
+				informers.IngressVersion = NetV1beta1IngressInformer
+			} else {
+				utils.AviLog.Error("NO BETA")
+				inginformer, _ := kubeInformerFactory.ForResource(NetworkingIngress)
+				informers.IngressInformer = inginformer
+				informers.IngressVersion = NetV1IngressInformer
+			}
 		case RouteInformer:
 			if ocs != nil {
 				oshiftInformerFactory := oshiftinformers.NewSharedInformerFactory(ocs, time.Second*30)

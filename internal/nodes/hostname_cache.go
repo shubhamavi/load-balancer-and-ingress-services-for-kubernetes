@@ -17,9 +17,9 @@ package nodes
 import (
 	"sync"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 )
 
 var hostNameListerInstance *HostNameLister

@@ -1,5 +1,5 @@
 FROM golang:latest AS build
-ENV BUILD_PATH="github.com/vmware/load-balancer-and-ingress-services-for-kubernetes"
+ENV BUILD_PATH="github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes"
 ENV AKO_VERSION="v1.3.2"
 RUN mkdir -p $GOPATH/src/$BUILD_PATH
 

@@ -20,16 +20,16 @@ import (
 	"sync"
 	"time"
 
-	crd "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	crd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/api"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/api/models"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/api"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/api/models"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	oshiftclient "github.com/openshift/client-go/route/clientset/versioned"
-	advl4 "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/clientset/versioned"
+	advl4 "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/clientset/versioned"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"

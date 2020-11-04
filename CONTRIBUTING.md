@@ -61,14 +61,14 @@ submit pull requests to have their changes considered and merged into the
 project's repository.
 
 1. Fork your own copy of the repository to your GitHub account by clicking on
-   `Fork` button on [AKO github repository](https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes).
+   `Fork` button on [AKO github repository](https://github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes).
 2. Clone the forked repository on your local setup.
     ```
     git clone https://github.com/$user/load-balancer-and-ingress-services-for-kubernetes
     ```
     Add a remote upstream to track upstream AKO repository.
     ```
-    git remote add upstream https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes
+    git remote add upstream https://github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes
     ```
     Never push to upstream master
     ```
@@ -96,7 +96,7 @@ project's repository.
     git push -f $remoteBranchName branchName
     ```
 8. Create a Pull request on GitHub.
-   Visit your fork at `https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes` and click
+   Visit your fork at `https://github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes` and click
    `Compare & Pull Request` button next to your `remoteBranchName` branch.
 
 ### Getting reviewers
@@ -157,7 +157,7 @@ AKO can be tested from your laptop. Please follow the instructions:
         export SEG_NAME=<se-group-name>
         
      NODE_NETWORK_LIST is a managment network name and a CIDR of that network. SEG_NAME can be empty for advance L4 deployment.
-     You can control additional settings by exporting respective variables from inside the deployment [file](https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/blob/master/helm/ako/templates/statefulset.yaml).
+     You can control additional settings by exporting respective variables from inside the deployment [file](https://github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/blob/master/helm/ako/templates/statefulset.yaml).
 
   4. Run: ./bin/ako
 
@@ -190,5 +190,5 @@ All tests are presently hosted inside VMware internal network:
     git push $remoteRevertName revertName
     ```
 5. Create a Pull Request on GitHub.
-   Visit your fork at `https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes` and click
+   Visit your fork at `https://github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes` and click
    `Compare & Pull Request` button next to your `remoteRevertName` branch.

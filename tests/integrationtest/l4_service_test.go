@@ -26,14 +26,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
-	crdfake "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned/fake"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	avinodes "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/nodes"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
+	crdfake "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned/fake"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	avinodes "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/nodes"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	"github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"

@@ -25,7 +25,7 @@ import (
 	"testing"
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/onsi/gomega"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/tests/scaletest/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/tests/scaletest/lib"
 )
 
 const SECURE = "secure"

@@ -25,8 +25,8 @@ import (
 	"strings"
 
 	"github.com/Masterminds/semver"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/api"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/api"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	"github.com/avinetworks/sdk/go/models"
 	routev1 "github.com/openshift/api/route/v1"
@@ -36,8 +36,8 @@ import (
 )
 
 var IngressApiMap = map[string]string{
-	"corev1":      utils.CoreV1IngressInformer,
-	"extensionv1": utils.ExtV1IngressInformer,
+	"corev1":      utils.NetV1IngressInformer,
+	"extensionv1": utils.NetV1beta1IngressInformer,
 }
 
 var ShardSchemeMap = map[string]string{

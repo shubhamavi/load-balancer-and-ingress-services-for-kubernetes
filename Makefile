@@ -5,7 +5,7 @@ GOGET=$(GOCMD) get
 GOTEST=$(GOCMD) test
 BINARY_NAME_AKO=ako
 AKO_VERSION=v1.3.2
-REL_PATH_AKO=github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/cmd/ako-main
+REL_PATH_AKO=github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/cmd/ako-main
 
 
 .PHONY:all
