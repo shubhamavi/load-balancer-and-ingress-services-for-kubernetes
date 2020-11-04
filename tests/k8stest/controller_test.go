@@ -19,7 +19,7 @@ import (
 	"testing"
 	"time"
 
-	crdfake "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned/fake"
+	crdfake "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned/fake"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/tests/integrationtest"

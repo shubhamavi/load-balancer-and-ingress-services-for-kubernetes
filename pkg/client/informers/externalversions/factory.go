@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned"
-	ako "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/informers/externalversions/ako"
-	internalinterfaces "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/informers/externalversions/internalinterfaces"
+	versioned "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned"
+	ako "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/informers/externalversions/ako"
+	internalinterfaces "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/informers/externalversions/internalinterfaces"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"

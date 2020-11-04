@@ -22,9 +22,9 @@ import (
 	time "time"
 
 	akov1alpha1 "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/apis/ako/v1alpha1"
-	versioned "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned"
-	internalinterfaces "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/listers/ako/v1alpha1"
+	versioned "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned"
+	internalinterfaces "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/listers/ako/v1alpha1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"

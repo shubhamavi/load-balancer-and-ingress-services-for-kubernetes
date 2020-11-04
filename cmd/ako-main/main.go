@@ -20,7 +20,7 @@ import (
 	"sync"
 	"time"
 
-	crd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned"
+	crd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
 

@@ -15,13 +15,13 @@
 package lib
 
 import (
-	akocrd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned"
-	akoinformer "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/informers/externalversions/ako/v1alpha1"
+	akocrd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned"
+	akoinformer "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/informers/externalversions/ako/v1alpha1"
 )
 
 var CRDClientset akocrd.Interface
 
-// crd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned/typed/ako/v1alpha1"
+// crd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned/typed/ako/v1alpha1"
 func SetCRDClientset(cs akocrd.Interface) {
 	CRDClientset = cs
 }

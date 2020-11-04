@@ -19,8 +19,8 @@ limitations under the License.
 package ako
 
 import (
-	v1alpha1 "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/informers/externalversions/ako/v1alpha1"
-	internalinterfaces "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/informers/externalversions/ako/v1alpha1"
+	internalinterfaces "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

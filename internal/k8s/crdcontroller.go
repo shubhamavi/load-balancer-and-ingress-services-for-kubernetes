@@ -19,8 +19,8 @@ import (
 	"time"
 
 	akov1alpha1 "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/apis/ako/v1alpha1"
-	akocrd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned"
-	akoinformers "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/informers/externalversions"
+	akocrd "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned"
+	akoinformers "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/informers/externalversions"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
 
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"

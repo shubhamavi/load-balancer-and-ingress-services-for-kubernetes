@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
-	crdfake "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned/fake"
+	crdfake "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/client/clientset/versioned/fake"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
 	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
 	avinodes "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/nodes"
