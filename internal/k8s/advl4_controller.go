@@ -21,11 +21,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/nodes"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/status"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/nodes"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/objects"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/status"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	advl4v1alpha1pre1 "github.com/vmware-tanzu/service-apis/apis/v1alpha1pre1"
 	advl4crd "github.com/vmware-tanzu/service-apis/pkg/client/clientset/versioned"

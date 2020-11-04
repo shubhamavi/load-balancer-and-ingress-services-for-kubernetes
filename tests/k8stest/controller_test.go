@@ -19,10 +19,10 @@ import (
 	"testing"
 	"time"
 
-	crdfake "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned/fake"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/tests/integrationtest"
+	crdfake "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/client/clientset/versioned/fake"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/k8s"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/tests/integrationtest"
 
 	corev1 "k8s.io/api/core/v1"
 	extensionv1beta1 "k8s.io/api/extensions/v1beta1"
@@ -34,7 +34,7 @@ import (
 	// To Do: add test for openshift route
 	//oshiftfake "github.com/openshift/client-go/route/clientset/versioned/fake"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 )
 
 var kubeClient *k8sfake.Clientset

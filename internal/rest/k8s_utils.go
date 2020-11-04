@@ -15,11 +15,11 @@
 package rest
 
 import (
-	avicache "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/status"
+	avicache "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/status"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 )
 
 // SyncObjectStatuses gets data from L3 cache and does a status update on the ingress objects

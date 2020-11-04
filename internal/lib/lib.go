@@ -24,8 +24,8 @@ import (
 	"strings"
 
 	"github.com/Masterminds/semver"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/api"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/api"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	"github.com/avinetworks/sdk/go/models"
 	routev1 "github.com/openshift/api/route/v1"

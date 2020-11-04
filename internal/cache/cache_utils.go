@@ -17,7 +17,7 @@ import (
 	"encoding/json"
 	"sync"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 )
 
 type NamespaceName struct {

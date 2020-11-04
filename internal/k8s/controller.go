@@ -19,10 +19,10 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/status"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/status"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	routev1 "github.com/openshift/api/route/v1"
 	oshiftclient "github.com/openshift/client-go/route/clientset/versioned"

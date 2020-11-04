@@ -22,8 +22,8 @@ import logging
 #Github API Url
 URL_GITHUB = "https://api.github.com/"
 
-# Github API url for vmware/load-balancer-and-ingress-services-for-kubernetes GIT repository
-URL_GITHUB_AVI_DEV = URL_GITHUB + "repos/vmware/load-balancer-and-ingress-services-for-kubernetes/"
+# Github API url for shubhamavi/load-balancer-and-ingress-services-for-kubernetes GIT repository
+URL_GITHUB_AVI_DEV = URL_GITHUB + "repos/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/"
 
 #Github headers
 HEADERS_GITHUB = {

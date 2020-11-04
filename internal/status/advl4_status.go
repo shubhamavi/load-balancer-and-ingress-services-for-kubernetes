@@ -23,9 +23,9 @@ import (
 	"strings"
 
 	advl4v1alpha1pre1 "github.com/vmware-tanzu/service-apis/apis/v1alpha1pre1"
-	avicache "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	avicache "github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/cache"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	core "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"

@@ -20,7 +20,7 @@ import (
 	advl4v1alpha1pre1 "github.com/vmware-tanzu/service-apis/apis/v1alpha1pre1"
 	advl4crd "github.com/vmware-tanzu/service-apis/pkg/client/clientset/versioned"
 	advl4informer "github.com/vmware-tanzu/service-apis/pkg/client/informers/externalversions/apis/v1alpha1pre1"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 	"k8s.io/apimachinery/pkg/types"
 )
 

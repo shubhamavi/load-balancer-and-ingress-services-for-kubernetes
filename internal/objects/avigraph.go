@@ -19,7 +19,7 @@ package objects
 import (
 	"sync"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 )
 
 var aviGraphinstance *AviGraphLister

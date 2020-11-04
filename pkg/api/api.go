@@ -20,8 +20,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/api/models"
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/api/models"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 
 	"github.com/gorilla/mux"
 )

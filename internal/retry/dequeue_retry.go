@@ -14,9 +14,9 @@
 package retry
 
 import (
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/nodes"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/internal/nodes"
 
-	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
+	"github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
 )
 
 func DequeueFastRetry(vsKey string) {

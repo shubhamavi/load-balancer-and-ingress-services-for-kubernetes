@@ -83,7 +83,7 @@ you get started:
 [Code of Conduct](CODE_OF_CONDUCT.md).
 * Check out our [Contributor Guide](CONTRIBUTING.md) for information
 about setting up your development environment and our contribution workflow.
-* Check out [Open Issues](https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/issues).
+* Check out [Open Issues](https://github.com/shubhamavi/load-balancer-and-ingress-services-for-kubernetes/issues).
 * [ako-dev](https://groups.google.com/g/ako-dev) to participate in discussions on AKO's development.
 
 
