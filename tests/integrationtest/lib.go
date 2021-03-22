@@ -839,19 +839,6 @@ func InitializeFakeAKOAPIServer() *api.FakeApiServer {
 	return akoApi
 }
 
-//s: namespace or hostname
-func GetShardVSNumber(s string) string {
-	var vsNum uint32
-	shardSize := lib.GetshardSize()
-	if shardSize != 0 {
-		vsNum = utils.Bkt(s, shardSize)
-	} else {
-		return ""
-	}
-	vsNumber := fmt.Sprint(vsNum)
-	return vsNumber
-}
-
 const defaultMockFilePath = "../avimockobjects"
 
 var AviFakeClientInstance *httptest.Server
