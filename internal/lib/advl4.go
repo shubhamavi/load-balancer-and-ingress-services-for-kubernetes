@@ -23,8 +23,8 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 
 	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
-	advl4crd "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/clientset/versioned"
-	advl4informer "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/informers/externalversions/apis/v1alpha1pre1"
+	advl4crd "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/gateway-api/client/clientset/versioned"
+	advl4informer "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/gateway-api/client/informers/externalversions/apis/v1alpha1pre1"
 )
 
 var AdvL4Clientset advl4crd.Interface

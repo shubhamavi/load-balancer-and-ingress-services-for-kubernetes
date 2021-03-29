@@ -102,7 +102,7 @@ func DequeueIngestion(key string, fullsync bool) {
 	}
 
 	// Push Services from InfraSetting updates. Valid for annotation based approach.
-	if objType == lib.AviInfraSetting && !lib.UseServicesAPI() {
+	if objType == lib.AviInfraSetting && !lib.UseGatewayAPI() {
 		svcNames, svcFound := schema.GetParentServices(name, namespace, key)
 		if svcFound && utils.CheckIfNamespaceAccepted(namespace) {
 			for _, svcNSNameKey := range svcNames {
@@ -111,7 +111,7 @@ func DequeueIngestion(key string, fullsync bool) {
 		}
 	}
 
-	if !ingressFound && (!lib.GetAdvancedL4() && !lib.UseServicesAPI()) {
+	if !ingressFound && (!lib.GetAdvancedL4() && !lib.UseGatewayAPI()) {
 		// If ingress is not found, let's do the other checks.
 		if objType == utils.L4LBService {
 			// L4 type of services need special handling. We create a dedicated VS in Avi for these.
@@ -141,7 +141,7 @@ func DequeueIngestion(key string, fullsync bool) {
 	}
 
 	// handle the services APIs
-	if lib.GetAdvancedL4() || lib.UseServicesAPI() &&
+	if lib.GetAdvancedL4() || lib.UseGatewayAPI() &&
 		(objType == utils.L4LBService || objType == lib.Gateway || objType == lib.GatewayClass || objType == utils.Endpoints || objType == lib.AviInfraSetting) {
 		if !valid && objType == utils.L4LBService {
 			schema, _ = ConfigDescriptor().GetByType(utils.Service)
@@ -255,12 +255,12 @@ func isGatewayDelete(gatewayKey string, key string) bool {
 		if err != nil {
 			return true
 		}
-	} else if lib.UseServicesAPI() {
+	} else if lib.UseGatewayAPI() {
 		//If namespace is not accepted, return true to delete model
 		if !utils.CheckIfNamespaceAccepted(namespace) {
 			return true
 		}
-		gateway, err := lib.GetSvcAPIInformers().GatewayInformer.Lister().Gateways(namespace).Get(gwName)
+		gateway, err := lib.GetGtwAPIInformers().GatewayInformer.Lister().Gateways(namespace).Get(gwName)
 		if err != nil && errors.IsNotFound(err) {
 			return true
 		}
@@ -272,7 +272,7 @@ func isGatewayDelete(gatewayKey string, key string) bool {
 		}
 
 		// Check if the gateway has a valid gateway class
-		err = validateSvcApiGatewayForClass(key, gateway)
+		err = validateGtwApiGatewayForClass(key, gateway)
 		if err != nil {
 			return true
 		}

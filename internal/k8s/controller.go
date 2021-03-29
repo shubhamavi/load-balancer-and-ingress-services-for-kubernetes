@@ -208,8 +208,8 @@ func AddServicesFromNSToIngestionQueue(numWorkers uint32, c *AviController, name
 		//Add L4 and Cluster API services to queue
 		if isSvcLb && !lib.GetLayer7Only() {
 			key = utils.L4LBService + "/" + utils.ObjKey(svcObj)
-			if lib.UseServicesAPI() {
-				checkSvcForSvcApiGatewayPortConflict(svcObj, key)
+			if lib.UseGatewayAPI() {
+				checkSvcForGtwApiGatewayPortConflict(svcObj, key)
 			}
 		} else {
 			key = utils.Service + "/" + utils.ObjKey(svcObj)
@@ -222,14 +222,14 @@ func AddServicesFromNSToIngestionQueue(numWorkers uint32, c *AviController, name
 }
 func AddGatewaysFromNSToIngestionQueue(numWorkers uint32, c *AviController, namespace string, msg string) {
 	//TODO: Add code for gateway
-	gatewayObjs, err := lib.GetSvcAPIInformers().GatewayInformer.Lister().Gateways(namespace).List(labels.Set(nil).AsSelector())
+	gatewayObjs, err := lib.GetGtwAPIInformers().GatewayInformer.Lister().Gateways(namespace).List(labels.Set(nil).AsSelector())
 	if err != nil {
 		utils.AviLog.Errorf("Unable to retrieve the gateways during namespace sync: %s", err)
 		return
 	}
 	for _, gatewayObj := range gatewayObjs {
 		key := lib.Gateway + "/" + utils.ObjKey(gatewayObj)
-		InformerStatusUpdatesForSvcApiGateway(key, gatewayObj)
+		InformerStatusUpdatesForGtwApiGateway(key, gatewayObj)
 		bkt := utils.Bkt(namespace, numWorkers)
 		c.workqueue[bkt].AddRateLimited(key)
 		utils.AviLog.Debugf("key: %s, msg: %s for namespace: %s", key, msg, namespace)
@@ -296,7 +296,7 @@ func AddNamespaceEventHandler(numWorkers uint32, c *AviController) cache.Resourc
 						utils.AviLog.Debugf("Adding L4 services for namespaces: %s", nsCur.GetName())
 						AddServicesFromNSToIngestionQueue(numWorkers, c, nsCur.GetName(), lib.NsFilterAdd)
 					}
-					if lib.UseServicesAPI() {
+					if lib.UseGatewayAPI() {
 						utils.AviLog.Debugf("Adding Gatways for namespaces: %s", nsCur.GetName())
 						AddGatewaysFromNSToIngestionQueue(numWorkers, c, nsCur.GetName(), lib.NsFilterAdd)
 					}
@@ -315,7 +315,7 @@ func AddNamespaceEventHandler(numWorkers uint32, c *AviController) cache.Resourc
 						utils.AviLog.Debugf("Deleting L4 services for namespaces: %s", nsCur.GetName())
 						AddServicesFromNSToIngestionQueue(numWorkers, c, nsCur.GetName(), lib.NsFilterDelete)
 					}
-					if lib.UseServicesAPI() {
+					if lib.UseGatewayAPI() {
 						utils.AviLog.Debugf("Deleting Gatways for namespaces: %s", nsCur.GetName())
 						AddGatewaysFromNSToIngestionQueue(numWorkers, c, nsCur.GetName(), lib.NsFilterDelete)
 					}
@@ -547,8 +547,8 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 				if lib.GetAdvancedL4() {
 					checkSvcForGatewayPortConflict(svc, key)
 				}
-				if lib.UseServicesAPI() {
-					checkSvcForSvcApiGatewayPortConflict(svc, key)
+				if lib.UseGatewayAPI() {
+					checkSvcForGtwApiGatewayPortConflict(svc, key)
 				}
 			} else {
 				if lib.GetAdvancedL4() || !utils.CheckIfNamespaceAccepted(namespace) {
@@ -617,8 +617,8 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 					if lib.GetAdvancedL4() {
 						checkSvcForGatewayPortConflict(svc, key)
 					}
-					if lib.UseServicesAPI() {
-						checkSvcForSvcApiGatewayPortConflict(svc, key)
+					if lib.UseGatewayAPI() {
+						checkSvcForGtwApiGatewayPortConflict(svc, key)
 					}
 				} else {
 					if lib.GetAdvancedL4() || !utils.CheckIfNamespaceAccepted(namespace) {
@@ -790,13 +790,13 @@ func (c *AviController) SetupEventHandlers(k8sinfo K8sinformers) {
 	}
 
 	if lib.GetAdvancedL4() {
-		// servicesAPI handlers GW/GWClass
+		// gatewayAPI handlers GW/GWClass
 		c.SetupAdvL4EventHandlers(numWorkers)
 		return
 	}
 
-	if lib.UseServicesAPI() {
-		c.SetupSvcApiEventHandlers(numWorkers)
+	if lib.UseGatewayAPI() {
+		c.SetupGtwApiEventHandlers(numWorkers)
 	}
 
 	ingressEventHandler := cache.ResourceEventHandlerFuncs{
@@ -1061,14 +1061,14 @@ func (c *AviController) Start(stopCh <-chan struct{}) {
 		}
 		utils.AviLog.Info("Service APIs v1alphapre1 caches synced")
 	} else {
-		if lib.UseServicesAPI() {
-			go lib.GetSvcAPIInformers().GatewayClassInformer.Informer().Run(stopCh)
-			go lib.GetSvcAPIInformers().GatewayInformer.Informer().Run(stopCh)
+		if lib.UseGatewayAPI() {
+			go lib.GetGtwAPIInformers().GatewayClassInformer.Informer().Run(stopCh)
+			go lib.GetGtwAPIInformers().GatewayInformer.Informer().Run(stopCh)
 
-			if !cache.WaitForCacheSync(stopCh, lib.GetSvcAPIInformers().GatewayClassInformer.Informer().HasSynced) {
+			if !cache.WaitForCacheSync(stopCh, lib.GetGtwAPIInformers().GatewayClassInformer.Informer().HasSynced) {
 				runtime.HandleError(fmt.Errorf("Timed out waiting for GatewayClass caches to sync"))
 			}
-			if !cache.WaitForCacheSync(stopCh, lib.GetSvcAPIInformers().GatewayInformer.Informer().HasSynced) {
+			if !cache.WaitForCacheSync(stopCh, lib.GetGtwAPIInformers().GatewayInformer.Informer().HasSynced) {
 				runtime.HandleError(fmt.Errorf("Timed out waiting for Gateway caches to sync"))
 			}
 			utils.AviLog.Info("Service APIs caches synced")

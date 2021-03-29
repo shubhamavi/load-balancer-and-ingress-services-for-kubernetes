@@ -117,8 +117,8 @@ func DeleteGatewayStatusAddress(svcMetadataObj avicache.ServiceMetadataObj, key 
 			Reason: "virtualservice deleted/notfound",
 		})
 		UpdateGatewayStatusObject(key, gw, gwStatus)
-	} else if lib.UseServicesAPI() {
-		return DeleteSvcApiStatus(key, svcMetadataObj)
+	} else if lib.UseGatewayAPI() {
+		return DeleteGtwApiStatus(key, svcMetadataObj)
 	}
 	utils.AviLog.Infof("key: %s, msg: Successfully reset the address status of gateway: %s", key, svcMetadataObj.Gateway)
 	return nil

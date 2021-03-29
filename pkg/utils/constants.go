@@ -72,7 +72,7 @@ const (
 	DEFAULT_FILE_SUFFIX           = "avi.log"
 	K8S_ETIMEDOUT                 = "timed out"
 	ADVANCED_L4                   = "ADVANCED_L4"
-	SERVICES_API                  = "SERVICES_API"
+	GATEWAY_API                  = "GATEWAY_API"
 
 	// container-lib/api constants
 	AVIAPI_INITIATING   = "INITIATING"

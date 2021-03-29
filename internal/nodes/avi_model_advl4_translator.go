@@ -26,15 +26,15 @@ import (
 
 	advl4v1alpha1pre1 "github.com/vmware-tanzu/service-apis/apis/v1alpha1pre1"
 	utilsnet "k8s.io/utils/net"
-	svcapiv1alpha1 "sigs.k8s.io/service-apis/apis/v1alpha1"
+	gtwapiv1alpha1 "sigs.k8s.io/gateway-api/apis/v1alpha1"
 )
 
 func (o *AviObjectGraph) BuildAdvancedL4Graph(namespace string, gatewayName string, key string) {
 	o.Lock.Lock()
 	defer o.Lock.Unlock()
 	var vsNode *AviVsNode
-	if lib.UseServicesAPI() {
-		vsNode = o.ConstructSvcApiL4VsNode(gatewayName, namespace, key)
+	if lib.UseGatewayAPI() {
+		vsNode = o.ConstructGtwApiL4VsNode(gatewayName, namespace, key)
 	} else {
 		vsNode = o.ConstructAdvL4VsNode(gatewayName, namespace, key)
 	}
@@ -130,14 +130,14 @@ func (o *AviObjectGraph) ConstructAdvL4VsNode(gatewayName, namespace, key string
 	return nil
 }
 
-func (o *AviObjectGraph) ConstructSvcApiL4VsNode(gatewayName, namespace, key string) *AviVsNode {
+func (o *AviObjectGraph) ConstructGtwApiL4VsNode(gatewayName, namespace, key string) *AviVsNode {
 	// The logic: Each listener in the gateway is a listener port on the Avi VS.
 	// A L4 policyset object is create where listener port --> pool. Pool gets it's server from the endpoints that has the same name as the 'service' pointed
 	// by the listener port.
 	found, listeners := objects.ServiceGWLister().GetGWListeners(namespace + "/" + gatewayName)
 	if found {
 		vsName := lib.GetL4VSName(gatewayName, namespace)
-		gw, _ := lib.GetSvcAPIInformers().GatewayInformer.Lister().Gateways(namespace).Get(gatewayName)
+		gw, _ := lib.GetGtwAPIInformers().GatewayInformer.Lister().Gateways(namespace).Get(gatewayName)
 
 		var serviceNSNames []string
 		if found, services := objects.ServiceGWLister().GetGwToSvcs(namespace + "/" + gatewayName); found {
@@ -204,7 +204,7 @@ func (o *AviObjectGraph) ConstructSvcApiL4VsNode(gatewayName, namespace, key str
 		// configures VS and VsVip nodes using infraSetting object (via CRD).
 		buildL4InfraSetting(key, avi_vs_meta, vsVipNode, nil, &gw.Spec.GatewayClassName)
 
-		if len(gw.Spec.Addresses) > 0 && gw.Spec.Addresses[0].Type == svcapiv1alpha1.IPAddressType {
+		if len(gw.Spec.Addresses) > 0 && gw.Spec.Addresses[0].Type == gtwapiv1alpha1.IPAddressType {
 			vsVipNode.IPAddress = gw.Spec.Addresses[0].Value
 		}
 

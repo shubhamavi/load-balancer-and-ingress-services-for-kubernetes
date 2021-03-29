@@ -32,8 +32,8 @@ import (
 	networkingv1beta1 "k8s.io/api/networking/v1beta1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	servicesapi "sigs.k8s.io/service-apis/apis/v1alpha1"
-	svcapiv1alpha1 "sigs.k8s.io/service-apis/apis/v1alpha1"
+	gatewayapi "sigs.k8s.io/gateway-api/apis/v1alpha1"
+	gtwapiv1alpha1 "sigs.k8s.io/gateway-api/apis/v1alpha1"
 )
 
 var (
@@ -254,14 +254,14 @@ func GatewayChanges(gwName string, namespace string, key string) ([]string, bool
 				objects.ServiceGWLister().DeleteGWListeners(namespace + "/" + gwName)
 			}
 		}
-	} else if lib.UseServicesAPI() {
-		gateway, err := lib.GetSvcAPIInformers().GatewayInformer.Lister().Gateways(namespace).Get(gwName)
+	} else if lib.UseGatewayAPI() {
+		gateway, err := lib.GetGtwAPIInformers().GatewayInformer.Lister().Gateways(namespace).Get(gwName)
 		if err != nil && k8serrors.IsNotFound(err) {
 			// Remove all the Gateway to Services mapping.
 			objects.ServiceGWLister().DeleteGWListeners(namespace + "/" + gwName)
 			objects.ServiceGWLister().RemoveGatewayGWclassMappings(namespace + "/" + gwName)
 		} else {
-			if gwListeners := parseSvcApiGatewayForListeners(gateway, key); len(gwListeners) > 0 {
+			if gwListeners := parseGtwApiGatewayForListeners(gateway, key); len(gwListeners) > 0 {
 				objects.ServiceGWLister().UpdateGWListeners(namespace+"/"+gwName, gwListeners)
 				objects.ServiceGWLister().UpdateGatewayGWclassMappings(namespace+"/"+gwName, gateway.Spec.GatewayClassName)
 			} else {
@@ -651,22 +651,22 @@ func AviSettingToGateway(infraSettingName string, namespace string, key string) 
 	}
 
 	// Get all GatewayClasses from AviInfraSetting.
-	gwClasses, err := lib.GetSvcAPIInformers().GatewayClassInformer.Informer().GetIndexer().ByIndex(lib.AviSettingGWClassIndex, lib.AkoGroup+"/"+lib.AviInfraSetting+"/"+infraSettingName)
+	gwClasses, err := lib.GetGtwAPIInformers().GatewayClassInformer.Informer().GetIndexer().ByIndex(lib.AviSettingGWClassIndex, lib.AkoGroup+"/"+lib.AviInfraSetting+"/"+infraSettingName)
 	if err != nil {
 		return allGateways, false
 	}
 
 	for _, gwClass := range gwClasses {
 		// Get all Gateways from GatewayClass.
-		gwClassObj, isGwClass := gwClass.(*servicesapi.GatewayClass)
+		gwClassObj, isGwClass := gwClass.(*gatewayapi.GatewayClass)
 		if isGwClass {
-			gateways, err := lib.GetSvcAPIInformers().GatewayInformer.Informer().GetIndexer().ByIndex(lib.GatewayClassGatewayIndex, gwClassObj.Name)
+			gateways, err := lib.GetGtwAPIInformers().GatewayInformer.Informer().GetIndexer().ByIndex(lib.GatewayClassGatewayIndex, gwClassObj.Name)
 			if err != nil {
 				utils.AviLog.Warnf("key: %s, msg: Unable to fetch Gateways %v", key, err)
 				continue
 			}
 			for _, gateway := range gateways {
-				if gatewayObj, isGw := gateway.(*servicesapi.Gateway); isGw {
+				if gatewayObj, isGw := gateway.(*gatewayapi.Gateway); isGw {
 					allGateways = append(allGateways, gatewayObj.Namespace+"/"+gatewayObj.Name)
 				}
 			}
@@ -737,9 +737,9 @@ func ParseL4ServiceForGateway(svc *corev1.Service, key string) (string, []string
 	if lib.GetAdvancedL4() {
 		gwNameLabel = lib.GatewayNameLabelKey
 		gwNamespaceLabel = lib.GatewayNamespaceLabelKey
-	} else if lib.UseServicesAPI() {
-		gwNameLabel = lib.SvcApiGatewayNameLabelKey
-		gwNamespaceLabel = lib.SvcApiGatewayNamespaceLabelKey
+	} else if lib.UseGatewayAPI() {
+		gwNameLabel = lib.GtwApiGatewayNameLabelKey
+		gwNamespaceLabel = lib.GtwApiGatewayNamespaceLabelKey
 	}
 
 	labels := svc.GetLabels()
@@ -771,11 +771,11 @@ func parseGatewayForListeners(gateway *advl4v1alpha1pre1.Gateway, key string) []
 	return listeners
 }
 
-func parseSvcApiGatewayForListeners(gateway *svcapiv1alpha1.Gateway, key string) []string {
+func parseGtwApiGatewayForListeners(gateway *gtwapiv1alpha1.Gateway, key string) []string {
 	var listeners []string
 	for _, listener := range gateway.Spec.Listeners {
-		gwName, nameOk := listener.Routes.Selector.MatchLabels[lib.SvcApiGatewayNameLabelKey]
-		gwNamespace, nsOk := listener.Routes.Selector.MatchLabels[lib.SvcApiGatewayNamespaceLabelKey]
+		gwName, nameOk := listener.Routes.Selector.MatchLabels[lib.GtwApiGatewayNameLabelKey]
+		gwNamespace, nsOk := listener.Routes.Selector.MatchLabels[lib.GtwApiGatewayNamespaceLabelKey]
 		if nameOk && nsOk && gwName == gateway.Name && gwNamespace == gateway.Namespace {
 			listeners = append(listeners, fmt.Sprintf("%s/%d", listener.Protocol, listener.Port))
 		}
@@ -810,8 +810,8 @@ func validateGatewayForClass(key string, gateway *advl4v1alpha1pre1.Gateway) err
 	return nil
 }
 
-func validateSvcApiGatewayForClass(key string, gateway *svcapiv1alpha1.Gateway) error {
-	gwClassObj, err := lib.GetSvcAPIInformers().GatewayClassInformer.Lister().Get(gateway.Spec.GatewayClassName)
+func validateGtwApiGatewayForClass(key string, gateway *gtwapiv1alpha1.Gateway) error {
+	gwClassObj, err := lib.GetGtwAPIInformers().GatewayClassInformer.Lister().Get(gateway.Spec.GatewayClassName)
 	if err != nil {
 		utils.AviLog.Errorf("key: %s, msg: Unable to fetch corresponding networking.x-k8s.io/gatewayclass %s %v",
 			key, gateway.Spec.GatewayClassName, err)
@@ -819,8 +819,8 @@ func validateSvcApiGatewayForClass(key string, gateway *svcapiv1alpha1.Gateway) 
 	}
 
 	for _, listener := range gateway.Spec.Listeners {
-		gwName, nameOk := listener.Routes.Selector.MatchLabels[lib.SvcApiGatewayNameLabelKey]
-		gwNamespace, nsOk := listener.Routes.Selector.MatchLabels[lib.SvcApiGatewayNamespaceLabelKey]
+		gwName, nameOk := listener.Routes.Selector.MatchLabels[lib.GtwApiGatewayNameLabelKey]
+		gwNamespace, nsOk := listener.Routes.Selector.MatchLabels[lib.GtwApiGatewayNamespaceLabelKey]
 		if !nameOk || !nsOk ||
 			(nameOk && gwName != gateway.Name) ||
 			(nsOk && gwNamespace != gateway.Namespace) {
@@ -829,7 +829,7 @@ func validateSvcApiGatewayForClass(key string, gateway *svcapiv1alpha1.Gateway) 
 	}
 
 	// Additional check to see if the gatewayclass is a valid avi gateway class or not.
-	if gwClassObj.Spec.Controller != lib.SvcApiAviGatewayController {
+	if gwClassObj.Spec.Controller != lib.GtwApiAviGatewayController {
 		// Return an error since this is not our object.
 		return errors.New("Unexpected controller")
 	}

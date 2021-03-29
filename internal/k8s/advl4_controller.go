@@ -31,8 +31,8 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/tools/cache"
 
-	advl4crd "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/clientset/versioned"
-	advl4informer "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/informers/externalversions"
+	advl4crd "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/gateway-api/client/clientset/versioned"
+	advl4informer "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/gateway-api/client/informers/externalversions"
 )
 
 func NewAdvL4Informers(cs advl4crd.Interface) {

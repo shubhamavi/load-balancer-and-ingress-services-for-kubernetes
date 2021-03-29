@@ -122,11 +122,11 @@ spec:
               configMapKeyRef:
                 name: avi-k8s-config
                 key: enableEVH
-          - name: SERVICES_API
+          - name: GATEWAY_API
             valueFrom:
               configMapKeyRef:
                 name: avi-k8s-config
-                key: servicesAPI
+                key: gatewayAPI
           - name: DEFAULT_DOMAIN
             valueFrom:
               configMapKeyRef:

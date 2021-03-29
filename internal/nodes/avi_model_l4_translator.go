@@ -407,8 +407,8 @@ func buildL4InfraSetting(key string, vs *AviVsNode, vsvip *AviVSVIPNode, svc *co
 	var err error
 	var infraSetting *akov1alpha1.AviInfraSetting
 
-	if lib.UseServicesAPI() && advl4GWClassName != nil {
-		gwClass, err := lib.GetSvcAPIInformers().GatewayClassInformer.Lister().Get(*advl4GWClassName)
+	if lib.UseGatewayAPI() && advl4GWClassName != nil {
+		gwClass, err := lib.GetGtwAPIInformers().GatewayClassInformer.Lister().Get(*advl4GWClassName)
 		if err != nil {
 			utils.AviLog.Warnf("key: %s, msg: Unable to get corresponding GatewayClass %s", key, err.Error())
 			return

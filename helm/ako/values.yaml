@@ -24,7 +24,7 @@ AKOSettings:
   namespaceSelector:
     labelKey: ""
     labelValue: ""
-  servicesAPI: false # Flag that enables AKO in services API mode:https://kubernetes-sigs.github.io/service-apis/ . Currently implemented only for L4. This flag uses the upstream GA APIs which are not backward compatible 
+  gatewayAPI: false # Flag that enables AKO in services API mode:https://kubernetes-sigs.github.io/gateway-api/ . Currently implemented only for L4. This flag uses the upstream GA APIs which are not backward compatible 
                      # with the advancedL4 APIs which uses a fork and a version of v1alpha1pre1 
 
 ### This section outlines the network settings for virtualservices. 
@@ -55,7 +55,7 @@ L7Settings:
 
 ### This section outlines all the knobs  used to control Layer 4 loadbalancing settings in AKO.
 L4Settings:
-  advancedL4: "false" # Use this knob to control the settings for the services API usage. Default to not using services APIs: https://github.com/kubernetes-sigs/service-apis
+  advancedL4: "false" # Use this knob to control the settings for the gateway API usage. Default to not using services APIs: https://github.com/kubernetes-sigs/gateway-api
   defaultDomain: "" # If multiple sub-domains are configured in the cloud, use this knob to set the default sub-domain to use for L4 VSes.
   autoFQDN: "default" # ENUM: default(<svc>.<ns>.<subdomain>), flat (<svc>-<ns>.<subdomain>), "disabled" If the value is disabled then the FQDN generation is disabled.
 

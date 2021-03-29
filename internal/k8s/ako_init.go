@@ -484,8 +484,8 @@ func (c *AviController) FullSyncK8s() error {
 				}
 			}
 		}
-		if lib.UseServicesAPI() {
-			gatewayObjs, err := lib.GetSvcAPIInformers().GatewayInformer.Lister().Gateways("").List(labels.Set(nil).AsSelector())
+		if lib.UseGatewayAPI() {
+			gatewayObjs, err := lib.GetGtwAPIInformers().GatewayInformer.Lister().Gateways("").List(labels.Set(nil).AsSelector())
 			if err != nil {
 				utils.AviLog.Errorf("Unable to retrieve the gateways during full sync: %s", err)
 				return err
@@ -495,12 +495,12 @@ func (c *AviController) FullSyncK8s() error {
 				ns := strings.Split(gatewayLabel, "/")
 				if utils.CheckIfNamespaceAccepted(ns[0]) {
 					key := lib.Gateway + "/" + utils.ObjKey(gatewayObj)
-					InformerStatusUpdatesForSvcApiGateway(key, gatewayObj)
+					InformerStatusUpdatesForGtwApiGateway(key, gatewayObj)
 					nodes.DequeueIngestion(key, true)
 				}
 			}
 
-			gwClassObjs, err := lib.GetSvcAPIInformers().GatewayClassInformer.Lister().List(labels.Set(nil).AsSelector())
+			gwClassObjs, err := lib.GetGtwAPIInformers().GatewayClassInformer.Lister().List(labels.Set(nil).AsSelector())
 			if err != nil {
 				utils.AviLog.Errorf("Unable to retrieve the gatewayclasses during full sync: %s", err)
 				return err

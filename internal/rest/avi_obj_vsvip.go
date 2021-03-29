@@ -332,21 +332,21 @@ func (rest *RestOperations) AviVsVipCacheAdd(rest_op *utils.RestOp, vsKey avicac
 					})
 					status.UpdateGatewayStatusObject(key, gw, gwStatus)
 
-				} else if lib.UseServicesAPI() {
-					gw, err := lib.GetSvcAPIInformers().GatewayInformer.Lister().Gateways(gwNSName[0]).Get(gwNSName[1])
+				} else if lib.UseGatewayAPI() {
+					gw, err := lib.GetGtwAPIInformers().GatewayInformer.Lister().Gateways(gwNSName[0]).Get(gwNSName[1])
 					if err != nil {
 						utils.AviLog.Warnf("key: %s, msg: Gateway object not found, skippig status update %v", key, err)
 						return err
 					}
 
 					gwStatus := gw.Status.DeepCopy()
-					status.UpdateSvcApiGatewayStatusGWCondition(key, gwStatus, &status.UpdateSvcApiGWStatusConditionOptions{
+					status.UpdateGtwApiGatewayStatusGWCondition(key, gwStatus, &status.UpdateGtwApiGWStatusConditionOptions{
 						Type:    "Pending",
 						Status:  metav1.ConditionTrue,
 						Reason:  "InvalidAddress",
 						Message: rest_op.Message,
 					})
-					status.UpdateSvcApiGatewayStatusObject(key, gw, gwStatus)
+					status.UpdateGtwApiGatewayStatusObject(key, gw, gwStatus)
 				}
 				utils.AviLog.Warnf("key: %s, msg: IPAddress Updates on gateway not supported, Please recreate gateway object with the new preferred IPAddress", key)
 				return errors.New(rest_op.Message)

@@ -25,17 +25,16 @@ import (
 	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/internal/lib"
 	crd "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/client/v1alpha1/clientset/versioned"
 
-	svcapi "sigs.k8s.io/service-apis/pkg/client/clientset/versioned"
-
 	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/api"
 	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/api/models"
 	"github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/pkg/utils"
-	advl4 "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/service-apis/client/clientset/versioned"
+	advl4 "github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/third_party/gateway-api/client/clientset/versioned"
 
 	oshiftclient "github.com/openshift/client-go/route/clientset/versioned"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+	gtwapi "sigs.k8s.io/gateway-api/pkg/client/clientset/versioned"
 )
 
 var (
@@ -80,7 +79,7 @@ func InitializeAKC() {
 
 	var crdClient *crd.Clientset
 	var advl4Client *advl4.Clientset
-	var svcAPIClient *svcapi.Clientset
+	var gtwAPIClient *gtwapi.Clientset
 	if lib.GetAdvancedL4() {
 		advl4Client, err = advl4.NewForConfig(cfg)
 		if err != nil {
@@ -88,13 +87,14 @@ func InitializeAKC() {
 		}
 		lib.SetAdvL4Clientset(advl4Client)
 	} else {
-		if lib.UseServicesAPI() {
-			svcAPIClient, err = svcapi.NewForConfig(cfg)
+		if lib.UseGatewayAPI() {
+			gtwAPIClient, err = gtwapi.NewForConfig(cfg)
+			if err != nil {
+				utils.AviLog.Fatalf("Error building gateway-api clientset: %s", err.Error())
+			}
+			lib.SetGatewayAPIClientset(gtwAPIClient)
 		}
-		if err != nil {
-			utils.AviLog.Fatalf("Error building service-api clientset: %s", err.Error())
-		}
-		lib.SetServicesAPIClientset(svcAPIClient)
+
 		crdClient, err = crd.NewForConfig(cfg)
 		if err != nil {
 			utils.AviLog.Fatalf("Error building AKO CRD clientset: %s", err.Error())
@@ -132,8 +132,8 @@ func InitializeAKC() {
 		k8s.NewAdvL4Informers(advl4Client)
 	} else {
 		k8s.NewCRDInformers(crdClient)
-		if lib.UseServicesAPI() {
-			k8s.NewSvcApiInformers(svcAPIClient)
+		if lib.UseGatewayAPI() {
+			k8s.NewGtwApiInformers(gtwAPIClient)
 		}
 	}
 

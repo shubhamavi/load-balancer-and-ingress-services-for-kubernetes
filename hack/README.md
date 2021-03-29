@@ -7,9 +7,9 @@ Run this script whenever we upgrade AKOs hostrule and httprule CRD versions. Cha
 <br/>
 Usage from the AKO workspace directory, Run `./hack/update-codegen-akocrd.sh`
 
-#### update-codegen-service-apis.sh
+#### update-codegen-advl4-gateway-api.sh
 This script should be used to generate clientsets, listers and informers for service APIs. The service API structs i.e. Gateway and GatewayClass are taken from vmware-tanzu/service-apis (support/v1alpha0 branch) repository.
 <br/>
-Run this script whenever we update service-apis types from upstream.
+Run this script whenever we update vmware-tanzu/service-apis types from upstream.
 <br/>
-Usage from the AKO workspace directory, Run `./hack/update-codegen-service-apis.sh`
+Usage from the AKO workspace directory, Run `./hack/update-codegen-advl4-gateway-api.sh`

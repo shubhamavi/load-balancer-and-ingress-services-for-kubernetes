@@ -473,8 +473,8 @@ func IsEvhEnabled() bool {
 }
 
 // If this flag is set to true, then AKO uses services API. Currently the support is limited for layer 4 Virtualservices
-func UseServicesAPI() bool {
-	if ok, _ := strconv.ParseBool(os.Getenv(SERVICES_API)); ok {
+func UseGatewayAPI() bool {
+	if ok, _ := strconv.ParseBool(os.Getenv(GATEWAY_API)); ok {
 		return true
 	}
 	return false
