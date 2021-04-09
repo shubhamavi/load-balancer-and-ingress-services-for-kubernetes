@@ -156,12 +156,9 @@ func DequeueIngestion(key string, fullsync bool) {
 				namespace, _, gwName := lib.ExtractTypeNameNamespace(gatewayKey)
 				modelName := lib.GetModelName(lib.GetTenant(), lib.GetNamePrefix()+namespace+"-"+gwName)
 				if isGatewayDelete(gatewayKey, key) {
-					// Check if a model corresponding to the gateway exists or not in memory.
-					if found, _ := objects.SharedAviGraphLister().Get(modelName); found {
-						objects.SharedAviGraphLister().Save(modelName, nil)
-						if !fullsync {
-							PublishKeyToRestLayer(modelName, key, sharedQueue)
-						}
+					objects.SharedAviGraphLister().Save(modelName, nil)
+					if !fullsync {
+						PublishKeyToRestLayer(modelName, key, sharedQueue)
 					}
 				} else {
 					aviModelGraph := NewAviObjectGraph()
