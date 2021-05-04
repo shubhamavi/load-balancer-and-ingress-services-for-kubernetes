@@ -31,6 +31,5 @@ func LogApi(next http.Handler) http.Handler {
 		AviLog.Debugf("%s: %s", r.Method, r.RequestURI)
 
 		next.ServeHTTP(w, r)
-		return
 	})
 }

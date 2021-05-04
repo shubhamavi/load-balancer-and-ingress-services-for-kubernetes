@@ -528,7 +528,6 @@ func (o *AviVsNode) ReplaceSniPoolInSNINode(newPoolNode *AviPoolNode, key string
 	}
 	// If we have reached here it means we haven't found a match. Just append the pool.
 	o.PoolRefs = append(o.PoolRefs, newPoolNode)
-	return
 }
 
 func (o *AviVsNode) ReplaceSniPGInSNINode(newPGNode *AviPoolGroupNode, key string) {
@@ -542,7 +541,6 @@ func (o *AviVsNode) ReplaceSniPGInSNINode(newPGNode *AviPoolGroupNode, key strin
 	}
 	// If we have reached here it means we haven't found a match. Just append.
 	o.PoolGroupRefs = append(o.PoolGroupRefs, newPGNode)
-	return
 }
 
 func (o *AviVsNode) ReplaceSniHTTPRefInSNINode(newHttpNode *AviHttpPolicySetNode, key string) {
@@ -556,7 +554,6 @@ func (o *AviVsNode) ReplaceSniHTTPRefInSNINode(newHttpNode *AviHttpPolicySetNode
 	}
 	// If we have reached here it means we haven't found a match. Just append.
 	o.HttpPolicyRefs = append(o.HttpPolicyRefs, newHttpNode)
-	return
 }
 
 func (o *AviVsNode) DeleteCACertRefInSNINode(cacertNodeName, key string) {
@@ -593,7 +590,6 @@ func (o *AviVsNode) ReplaceSniSSLRefInSNINode(newSslNode *AviTLSKeyCertNode, key
 	}
 	// If we have reached here it means we haven't found a match. Just append.
 	o.SSLKeyCertRefs = append(o.SSLKeyCertRefs, newSslNode)
-	return
 }
 
 func (o *AviVsNode) CheckHttpPolNameNChecksum(httpNodeName string, checksum uint32) bool {

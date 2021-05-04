@@ -36,9 +36,7 @@ import (
 )
 
 func NewAdvL4Informers(cs advl4crd.Interface) {
-	var advl4InformerFactory advl4informer.SharedInformerFactory
-
-	advl4InformerFactory = advl4informer.NewSharedInformerFactoryWithOptions(cs, time.Second*30)
+	advl4InformerFactory := advl4informer.NewSharedInformerFactoryWithOptions(cs, time.Second*30)
 	gatewayInformer := advl4InformerFactory.Networking().V1alpha1pre1().Gateways()
 	gatewayClassInformer := advl4InformerFactory.Networking().V1alpha1pre1().GatewayClasses()
 
@@ -166,8 +164,6 @@ func (c *AviController) SetupAdvL4EventHandlers(numWorkers uint32) {
 
 	informer.GatewayInformer.Informer().AddEventHandler(gatewayEventHandler)
 	informer.GatewayClassInformer.Informer().AddEventHandler(gatewayClassEventHandler)
-
-	return
 }
 
 func InformerStatusUpdatesForGateway(key string, gateway *advl4v1alpha1pre1.Gateway) {
@@ -257,8 +253,6 @@ func checkSvcForGatewayPortConflict(svc *corev1.Service, key string) {
 
 	// detect unsupported protocol
 	// TODO
-
-	return
 }
 
 func checkGWForGatewayPortConflict(key string, gw *advl4v1alpha1pre1.Gateway) {

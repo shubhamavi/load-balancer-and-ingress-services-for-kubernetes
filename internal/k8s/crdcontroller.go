@@ -34,9 +34,7 @@ import (
 )
 
 func NewCRDInformers(cs akocrd.Interface) {
-	var akoInformerFactory akoinformers.SharedInformerFactory
-
-	akoInformerFactory = akoinformers.NewSharedInformerFactoryWithOptions(cs, time.Second*30)
+	akoInformerFactory := akoinformers.NewSharedInformerFactoryWithOptions(cs, time.Second*30)
 	hostRuleInformer := akoInformerFactory.Ako().V1alpha1().HostRules()
 	httpRuleInformer := akoInformerFactory.Ako().V1alpha1().HTTPRules()
 	aviSettingsInformer := akoInformerFactory.Ako().V1alpha1().AviInfraSettings()
@@ -56,11 +54,7 @@ func isHTTPRuleUpdated(oldHTTPRule, newHTTPRule *akov1alpha1.HTTPRule) bool {
 	oldSpecHash := utils.Hash(utils.Stringify(oldHTTPRule.Spec))
 	newSpecHash := utils.Hash(utils.Stringify(newHTTPRule.Spec))
 
-	if oldSpecHash != newSpecHash {
-		return true
-	}
-
-	return false
+	return oldSpecHash != newSpecHash
 }
 
 func isAviInfraUpdated(oldAviInfra, newAviInfra *akov1alpha1.AviInfraSetting) bool {
@@ -71,11 +65,7 @@ func isAviInfraUpdated(oldAviInfra, newAviInfra *akov1alpha1.AviInfraSetting) bo
 	oldSpecHash := utils.Hash(utils.Stringify(oldAviInfra.Spec))
 	newSpecHash := utils.Hash(utils.Stringify(newAviInfra.Spec))
 
-	if oldSpecHash != newSpecHash {
-		return true
-	}
-
-	return false
+	return oldSpecHash != newSpecHash
 }
 
 // SetupAKOCRDEventHandlers handles setting up of AKO CRD event handlers
@@ -264,8 +254,6 @@ func (c *AviController) SetupAKOCRDEventHandlers(numWorkers uint32) {
 			},
 		},
 	)
-
-	return
 }
 
 // validateHostRuleObj would do validation checks

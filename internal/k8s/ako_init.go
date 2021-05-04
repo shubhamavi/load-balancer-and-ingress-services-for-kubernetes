@@ -219,11 +219,11 @@ func (c *AviController) InitController(informers K8sinformers, registeredInforme
 	var statusWG *sync.WaitGroup
 	if len(waitGroupMap) > 0 {
 		// Fetch all the waitgroups
-		ingestionwg, _ = waitGroupMap[0]["ingestion"]
-		graphwg, _ = waitGroupMap[0]["graph"]
-		fastretrywg, _ = waitGroupMap[0]["fastretry"]
-		slowretrywg, _ = waitGroupMap[0]["slowretry"]
-		statusWG, _ = waitGroupMap[0]["status"]
+		ingestionwg = waitGroupMap[0]["ingestion"]
+		graphwg = waitGroupMap[0]["graph"]
+		fastretrywg = waitGroupMap[0]["fastretry"]
+		slowretrywg = waitGroupMap[0]["slowretry"]
+		statusWG = waitGroupMap[0]["status"]
 	}
 
 	/** Sequence:
@@ -234,8 +234,7 @@ func (c *AviController) InitController(informers K8sinformers, registeredInforme
 	// start the go routines draining the queues in various layers
 	var graphQueue *utils.WorkerQueue
 	// This is the first time initialization of the queue. For hostname based sharding, we don't want layer 2 to process the queue using multiple go routines.
-	var retryQueueWorkers uint32
-	retryQueueWorkers = 1
+	retryQueueWorkers := uint32(1)
 	slowRetryQParams := utils.WorkerQueue{NumWorkers: retryQueueWorkers, WorkqueueName: lib.SLOW_RETRY_LAYER, SlowSyncTime: lib.SLOW_SYNC_TIME}
 	fastRetryQParams := utils.WorkerQueue{NumWorkers: retryQueueWorkers, WorkqueueName: lib.FAST_RETRY_LAYER}
 
@@ -603,11 +602,10 @@ func (c *AviController) FullSyncK8s() error {
 	// Now also publish the newly generated models (if any)
 	// Publish all the models to REST layer.
 	utils.AviLog.Debugf("Newly generated models that do not exist in cache %s", utils.Stringify(allModels))
-	if allModels != nil {
-		for _, modelName := range allModels {
-			nodes.PublishKeyToRestLayer(modelName, "fullsync", sharedQueue)
-		}
+	for _, modelName := range allModels {
+		nodes.PublishKeyToRestLayer(modelName, "fullsync", sharedQueue)
 	}
+
 	return nil
 }
 

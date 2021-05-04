@@ -340,18 +340,12 @@ func GetTenant() string {
 
 func GetTenantsPerCluster() bool {
 	tpc := os.Getenv("TENANTS_PER_CLUSTER")
-	if tpc == "true" {
-		return true
-	}
-	return false
+	return tpc == "true"
 }
 
 func GetDefaultIngController() bool {
 	defaultIngCtrl := os.Getenv("DEFAULT_ING_CONTROLLER")
-	if defaultIngCtrl != "false" {
-		return true
-	}
-	return false
+	return defaultIngCtrl != "false"
 }
 
 func GetNamespaceToSync() string {
@@ -499,22 +493,15 @@ func GetDomain() string {
 // This utility returns a true/false depending on whether
 // the user requires advanced L4 functionality
 func GetAdvancedL4() bool {
-	advanceL4 := os.Getenv(ADVANCED_L4)
-	if advanceL4 == "true" {
-
-		return true
-	}
-	return false
+	advancedL4 := os.Getenv(ADVANCED_L4)
+	return advancedL4 == "true"
 }
 
 // This utility returns true if AKO is configured to create
 // VS with Enhanced Virtual Hosting
 func IsEvhEnabled() bool {
 	evh := os.Getenv(ENABLE_EVH)
-	if evh == "true" {
-		return true
-	}
-	return false
+	return evh == "true"
 }
 
 // If this flag is set to true, then AKO uses services API. Currently the support is limited for layer 4 Virtualservices
@@ -739,10 +726,7 @@ func L4PolicyChecksum(ports []int64, protocol string, markers []*models.RoleFilt
 
 func IsNodePortMode() bool {
 	nodePortType := os.Getenv(SERVICE_TYPE)
-	if nodePortType == NODE_PORT {
-		return true
-	}
-	return false
+	return nodePortType == NODE_PORT
 }
 
 // ToDo: Set the Service Type only once. But this creates a problem in UTs,

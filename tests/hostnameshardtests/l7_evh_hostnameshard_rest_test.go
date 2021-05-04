@@ -536,10 +536,7 @@ func TestMultiHostMultiSecretCacheSyncForEvh(t *testing.T) {
 	sniVSKey3 := cache.NamespaceName{Namespace: "admin", Name: "cluster--red-foo.com"}
 	g.Eventually(func() bool {
 		_, found1 := mcache.VsCacheMeta.AviCacheGet(sniVSKey3)
-		if found1 {
-			return true
-		}
-		return false
+		return found1
 	}, 20*time.Second).Should(gomega.Equal(true))
 	if err := KubeClient.NetworkingV1beta1().Ingresses("red").Delete(context.TODO(), "foo-with-targets-2", metav1.DeleteOptions{}); err != nil {
 		t.Fatalf("Couldn't DELETE the Ingress %v", err)

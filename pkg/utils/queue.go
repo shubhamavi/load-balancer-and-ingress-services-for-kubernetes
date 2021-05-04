@@ -33,7 +33,7 @@ type WorkQueueWrapper struct {
 }
 
 func (w *WorkQueueWrapper) GetQueueByName(queueName string) *WorkerQueue {
-	workqueue, _ := w.queueCollection[queueName]
+	workqueue := w.queueCollection[queueName]
 	return workqueue
 }
 
@@ -109,10 +109,14 @@ func (c *WorkerQueue) StopWorkers(stopCh <-chan struct{}) {
 func (c *WorkerQueue) runWorker(wg *sync.WaitGroup) {
 	defer wg.Done()
 	workerId := uint32(0xffffffff)
+	AviLog.Infof("%s HERE1: %v", c.WorkqueueName, workerId)
+
 	c.workerIdMutex.Lock()
+	AviLog.Infof("%s HERE2: %v %v", c.WorkqueueName, c.NumWorkers, c.workerId)
 	for i := uint32(0); i < c.NumWorkers; i++ {
 		if ((uint32(1) << i) & c.workerId) != 0 {
 			workerId = i
+			AviLog.Infof("%s HERE3: %v", c.WorkqueueName, workerId)
 			c.workerId = c.workerId & ^(uint32(1) << i)
 			break
 		}

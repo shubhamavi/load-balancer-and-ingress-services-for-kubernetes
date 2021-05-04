@@ -101,6 +101,4 @@ func (a *StatusModel) UpdateAviApiRestStatus(connectionStatus string, err error)
 	}
 
 	a.AviApi = aviApiRestStatus
-
-	return
 }

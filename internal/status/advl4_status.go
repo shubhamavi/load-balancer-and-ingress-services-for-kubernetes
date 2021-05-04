@@ -88,7 +88,6 @@ func UpdateGatewayStatusAddress(options []UpdateOptions, bulk bool) {
 	}
 
 	UpdateL4LBStatus(updateServiceOptions, bulk)
-	return
 }
 
 func parseOptionsFromMetadata(options []UpdateOptions, bulk bool) ([]string, []UpdateOptions) {
@@ -263,7 +262,6 @@ func UpdateGatewayStatusObject(key string, gw *advl4v1alpha1pre1.Gateway, update
 	}
 
 	utils.AviLog.Infof("key: %s, msg: Successfully updated the gateway %s/%s status %+v", key, gw.Namespace, gw.Name, utils.Stringify(updateStatus))
-	return
 }
 
 func InitializeGatewayConditions(gwStatus *advl4v1alpha1pre1.GatewayStatus, gwSpec *advl4v1alpha1pre1.GatewaySpec, gwReady bool) {
@@ -317,7 +315,6 @@ func InitializeGatewayConditions(gwStatus *advl4v1alpha1pre1.GatewayStatus, gwSp
 	if len(gwStatus.Addresses) == 0 {
 		gwStatus.Addresses = []advl4v1alpha1pre1.GatewayAddress{}
 	}
-	return
 }
 
 // getGateways fetches all ingresses and returns a map: {"namespace/name": ingressObj...}

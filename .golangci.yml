@@ -18,3 +18,4 @@ linters:
     - staticcheck
     - goimports
     - vet
+    - gosimple

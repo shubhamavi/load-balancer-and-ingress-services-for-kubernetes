@@ -72,7 +72,7 @@ func InitializeAKC() {
 		kubeCluster = true
 	}
 
-	if kubeCluster == false {
+	if !kubeCluster {
 		cfg, err = clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
 		utils.AviLog.Infof("master: %s", masterURL)
 		if err != nil {

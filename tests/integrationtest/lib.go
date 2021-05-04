@@ -910,7 +910,7 @@ func NewAviFakeClientInstance(skipCachePopulation ...bool) {
 
 		// resets avi client pool instance, allows to connect with the new `ts` server
 		cache.AviClientInstance = nil
-		if len(skipCachePopulation) == 0 || skipCachePopulation[0] == false {
+		if len(skipCachePopulation) == 0 || !skipCachePopulation[0] {
 			k8s.PopulateCache()
 		}
 	}

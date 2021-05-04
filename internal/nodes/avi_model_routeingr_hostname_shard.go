@@ -222,7 +222,7 @@ func ProcessSecureHosts(routeIgrObj RouteIngressModel, key string, parsedIng Ing
 				}
 			}
 			hostsMap[host].SecurePolicy = lib.PolicyEdgeTerm
-			if tlssetting.redirect == true {
+			if tlssetting.redirect {
 				hostsMap[host].InsecurePolicy = lib.PolicyRedirect
 			}
 			hostsMap[host].PathSvc = getPathSvc(newPathSvc)
@@ -247,7 +247,7 @@ func ProcessPassthroughHosts(routeIgrObj RouteIngressModel, key string, parsedIn
 		}
 		hostsMap[host].SecurePolicy = lib.PolicyPass
 		redirect := false
-		if pass.redirect == true {
+		if pass.redirect {
 			redirect = true
 			hostsMap[host].InsecurePolicy = lib.PolicyRedirect
 		}
@@ -419,11 +419,9 @@ func updateHostPathCache(ns, ingress string, oldHostMap, newHostMap map[string]*
 	}
 
 	// add from newHostMap
-	if newHostMap != nil {
-		for host, newMap := range newHostMap {
-			for path := range newMap.PathSvc {
-				SharedHostNameLister().SaveHostPathStore(host, path, mmapval)
-			}
+	for host, newMap := range newHostMap {
+		for path := range newMap.PathSvc {
+			SharedHostNameLister().SaveHostPathStore(host, path, mmapval)
 		}
 	}
 }

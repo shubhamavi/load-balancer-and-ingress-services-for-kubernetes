@@ -115,8 +115,6 @@ func UpdateRouteStatus(options []UpdateOptions, bulk bool) {
 			}}, true, lib.SyncStatusKey)
 		}
 	}
-
-	return
 }
 
 func getRoutes(routeNSNames []string, bulk bool, retryNum ...int) map[string]*routev1.Route {
@@ -222,7 +220,6 @@ func UpdateRouteStatusWithErrMsg(key, routeName, namespace, msg string, retryNum
 			UpdateRouteStatusWithErrMsg(key, routeName, namespace, msg, retry+1)
 		}
 	}
-	return
 }
 
 func routeStatusCheck(key string, oldStatus []routev1.RouteIngress, hostname string) bool {

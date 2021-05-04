@@ -77,10 +77,9 @@ func RemoveSniInModel(currentSniNodeName string, modelSniNodes []*AviVsNode, key
 func (o *AviObjectGraph) ConstructAviL7VsNode(vsName string, key string, routeIgrObj RouteIngressModel) *AviVsNode {
 	o.Lock.Lock()
 	defer o.Lock.Unlock()
-	var avi_vs_meta *AviVsNode
 
 	// This is a shared VS - always created in the admin namespace for now.
-	avi_vs_meta = &AviVsNode{
+	avi_vs_meta := &AviVsNode{
 		Name:               vsName,
 		Tenant:             lib.GetTenant(),
 		SharedVS:           true,
@@ -337,7 +336,7 @@ func (o *AviObjectGraph) BuildPolicyPGPoolsForSNI(vsNode []*AviVsNode, tlsNode *
 				},
 			}
 
-			if hostpath.reencrypt == true {
+			if hostpath.reencrypt {
 				o.BuildPoolSecurity(poolNode, hostpath, key)
 			}
 			serviceType := lib.GetServiceType()

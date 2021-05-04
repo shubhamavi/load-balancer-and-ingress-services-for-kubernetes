@@ -309,10 +309,7 @@ func PoolVerification(t *testing.T) bool {
 		poolList = append(poolList, *pool.Name)
 	}
 	diffNum := len(DiffOfLists(ingressPoolList, poolList))
-	if diffNum == initialNumOfPools {
-		return true
-	}
-	return false
+	return diffNum == initialNumOfPools
 }
 
 /* Verifies if all requires DNS A records are created in the DNS VS or not */
@@ -330,10 +327,7 @@ func DNSARecordsVerification(t *testing.T, hostNames []string) bool {
 			val++
 		}
 	}
-	if (len(newSharedVSFQDN) - val) == 0 {
-		return true
-	}
-	return false
+	return (len(newSharedVSFQDN) - val) == 0
 }
 
 /* Verifies if all requires VSes for secure ingresses are created or not */
@@ -365,10 +359,7 @@ func VSVerification(t *testing.T) bool {
 			val++
 		}
 	}
-	if (len(newSharedVSesCreated) - val) == 0 {
-		return true
-	}
-	return false
+	return (len(newSharedVSesCreated) - val) == 0
 }
 
 /* Calls Pool, VS and DNS A records verification based on the ingress type */

@@ -239,7 +239,7 @@ func (c *AviObjCache) DeleteUnmarked() {
 	for _, objkey := range c.DSCache.AviGetAllKeys() {
 		intf, _ := c.DSCache.AviCacheGet(objkey)
 		if obj, ok := intf.(*AviDSCache); ok {
-			if obj.HasReference == false {
+			if !obj.HasReference {
 				utils.AviLog.Infof("Reference Not found for datascript: %s", objkey)
 				dsKeys = append(dsKeys, objkey)
 			}
@@ -249,7 +249,7 @@ func (c *AviObjCache) DeleteUnmarked() {
 	for _, objkey := range c.HTTPPolicyCache.AviGetAllKeys() {
 		intf, _ := c.HTTPPolicyCache.AviCacheGet(objkey)
 		if obj, ok := intf.(*AviHTTPPolicyCache); ok {
-			if obj.HasReference == false {
+			if !obj.HasReference {
 				utils.AviLog.Infof("Reference Not found for http policy: %s", objkey)
 				httpKeys = append(httpKeys, objkey)
 			}
@@ -259,7 +259,7 @@ func (c *AviObjCache) DeleteUnmarked() {
 	for _, objkey := range c.L4PolicyCache.AviGetAllKeys() {
 		intf, _ := c.L4PolicyCache.AviCacheGet(objkey)
 		if obj, ok := intf.(*AviL4PolicyCache); ok {
-			if obj.HasReference == false {
+			if !obj.HasReference {
 				utils.AviLog.Infof("Reference Not found for l4 policy: %s", objkey)
 				l4Keys = append(l4Keys, objkey)
 			}
@@ -269,7 +269,7 @@ func (c *AviObjCache) DeleteUnmarked() {
 	for _, objkey := range c.PgCache.AviGetAllKeys() {
 		intf, _ := c.PgCache.AviCacheGet(objkey)
 		if obj, ok := intf.(*AviPGCache); ok {
-			if obj.HasReference == false {
+			if !obj.HasReference {
 				utils.AviLog.Infof("Reference Not found for poolgroup: %s", objkey)
 				pgKeys = append(pgKeys, objkey)
 			}
@@ -280,7 +280,7 @@ func (c *AviObjCache) DeleteUnmarked() {
 	for _, objkey := range c.PoolCache.AviGetAllKeys() {
 		intf, _ := c.PoolCache.AviCacheGet(objkey)
 		if obj, ok := intf.(*AviPoolCache); ok {
-			if obj.HasReference == false {
+			if !obj.HasReference {
 				utils.AviLog.Infof("Reference Not found for pool: %s", objkey)
 				poolKeys = append(poolKeys, objkey)
 			}
@@ -290,7 +290,7 @@ func (c *AviObjCache) DeleteUnmarked() {
 	for _, objkey := range c.SSLKeyCache.AviGetAllKeys() {
 		intf, _ := c.SSLKeyCache.AviCacheGet(objkey)
 		if obj, ok := intf.(*AviSSLCache); ok {
-			if obj.HasReference == false {
+			if !obj.HasReference {
 				utils.AviLog.Infof("Reference Not found for ssl key: %s", objkey)
 				sslKeys = append(sslKeys, objkey)
 			}
@@ -300,7 +300,7 @@ func (c *AviObjCache) DeleteUnmarked() {
 	for _, objkey := range c.VSVIPCache.AviGetAllKeys() {
 		intf, _ := c.VSVIPCache.AviCacheGet(objkey)
 		if obj, ok := intf.(*AviVSVIPCache); ok {
-			if obj.HasReference == false {
+			if !obj.HasReference {
 				utils.AviLog.Infof("Reference Not found for vsvip: %s", objkey)
 				vsVipKeys = append(vsVipKeys, objkey)
 			}
@@ -1203,9 +1203,7 @@ func (c *AviObjCache) AviPopulateOnePGCache(client *clients.AviClient,
 
 func (c *AviObjCache) AviPopulateOneVsVipCache(client *clients.AviClient,
 	cloud string, objName string) error {
-	var uri string
-
-	uri = "/api/vsvip?name=" + objName + "&cloud_ref.name=" + cloud
+	uri := "/api/vsvip?name=" + objName + "&cloud_ref.name=" + cloud
 
 	result, err := lib.AviGetCollectionRaw(client, uri)
 	if err != nil {
@@ -1965,9 +1963,7 @@ func (c *AviObjCache) AviObjOneVSCachePopulate(client *clients.AviClient, cloud 
 	// This method should be called only from layer-3 during a retry.
 	var rest_response interface{}
 	akoUser := lib.AKOUser
-	var uri string
-
-	uri = "/api/virtualservice?name=" + vsName + "&cloud_ref.name=" + cloud + "&created_by=" + akoUser
+	uri := "/api/virtualservice?name=" + vsName + "&cloud_ref.name=" + cloud + "&created_by=" + akoUser
 
 	utils.AviLog.Debugf("Refreshing cache for vs uri: %s", uri)
 	err := lib.AviGet(client, uri, &rest_response)
@@ -1984,7 +1980,7 @@ func (c *AviObjCache) AviObjOneVSCachePopulate(client *clients.AviClient, cloud 
 		utils.AviLog.Debugf("Vs Get uri %v returned %v vses", uri,
 			resp["count"])
 		k := NamespaceName{Namespace: lib.GetTenant(), Name: vsName}
-		objCount, _ := resp["count"]
+		objCount := resp["count"]
 		if objCount == 0.0 {
 			utils.AviLog.Debugf("Empty response removing VS meta :%s", k)
 			// Count is 0 delete the VS.

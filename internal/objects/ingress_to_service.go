@@ -316,7 +316,7 @@ func (v *SecretHostNameNSCache) DecrementSecretToHostNameMapping(secretName stri
 func (v *IngHostCache) GetIngToHost(ingName string) (bool, map[string]map[string][]string) {
 	found, hosts := v.ingHostObjects.Get(ingName)
 	if !found {
-		return false, make(map[string]map[string][]string, 0)
+		return false, make(map[string]map[string][]string)
 	}
 	return true, hosts.(map[string]map[string][]string)
 }

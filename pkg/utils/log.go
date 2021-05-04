@@ -168,6 +168,4 @@ func init() {
 	sugar := logger.Sugar()
 	defer sugar.Sync()
 	AviLog = AviLogger{sugar, logger, atom}
-
-	return
 }

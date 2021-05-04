@@ -29,10 +29,9 @@ import (
 func (o *AviObjectGraph) BuildVSForPassthrough(vsName, namespace, hostname, key string) *AviVsNode {
 	o.Lock.Lock()
 	defer o.Lock.Unlock()
-	var avi_vs_meta *AviVsNode
 
 	// create the secured shared VS to listen on port 443
-	avi_vs_meta = &AviVsNode{
+	avi_vs_meta := &AviVsNode{
 		Name:               vsName,
 		Tenant:             lib.GetTenant(),
 		EastWest:           false,

@@ -452,13 +452,13 @@ func (c *AviCache) AviCacheGetKeyByUuid(uuid string) (interface{}, bool) {
 	c.cache_lock.RLock()
 	defer c.cache_lock.RUnlock()
 	for key, value := range c.cache {
-		switch value.(type) {
+		switch typedValue := value.(type) {
 		case *AviVsCache:
-			if value.(*AviVsCache).Uuid == uuid {
+			if typedValue.Uuid == uuid {
 				return key, true
 			}
 		case *AviVSVIPCache:
-			if value.(*AviVSVIPCache).Uuid == uuid {
+			if typedValue.Uuid == uuid {
 				return key, true
 			}
 		}
@@ -470,38 +470,38 @@ func (c *AviCache) AviCacheGetNameByUuid(uuid string) (interface{}, bool) {
 	c.cache_lock.RLock()
 	defer c.cache_lock.RUnlock()
 	for _, value := range c.cache {
-		switch value.(type) {
+		switch typedValue := value.(type) {
 		case *AviPoolCache:
-			if value.(*AviPoolCache).Uuid == uuid {
-				return value.(*AviPoolCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		case *AviVSVIPCache:
-			if value.(*AviVSVIPCache).Uuid == uuid {
-				return value.(*AviVSVIPCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		case *AviSSLCache:
-			if value.(*AviSSLCache).Uuid == uuid {
-				return value.(*AviSSLCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		case *AviDSCache:
-			if value.(*AviDSCache).Uuid == uuid {
-				return value.(*AviDSCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		case *AviL4PolicyCache:
-			if value.(*AviL4PolicyCache).Uuid == uuid {
-				return value.(*AviL4PolicyCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		case *AviHTTPPolicyCache:
-			if value.(*AviHTTPPolicyCache).Uuid == uuid {
-				return value.(*AviHTTPPolicyCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		case *AviPGCache:
-			if value.(*AviPGCache).Uuid == uuid {
-				return value.(*AviPGCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		case *AviPkiProfileCache:
-			if value.(*AviPkiProfileCache).Uuid == uuid {
-				return value.(*AviPkiProfileCache).Name, true
+			if typedValue.Uuid == uuid {
+				return typedValue.Name, true
 			}
 		}
 	}

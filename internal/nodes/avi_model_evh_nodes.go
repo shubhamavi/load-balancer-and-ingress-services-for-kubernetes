@@ -341,7 +341,6 @@ func (o *AviEvhVsNode) ReplaceEvhPoolInEVHNode(newPoolNode *AviPoolNode, key str
 	}
 	// If we have reached here it means we haven't found a match. Just append the pool.
 	o.PoolRefs = append(o.PoolRefs, newPoolNode)
-	return
 }
 
 func (o *AviEvhVsNode) ReplaceEvhPGInEVHNode(newPGNode *AviPoolGroupNode, key string) {
@@ -355,7 +354,6 @@ func (o *AviEvhVsNode) ReplaceEvhPGInEVHNode(newPGNode *AviPoolGroupNode, key st
 	}
 	// If we have reached here it means we haven't found a match. Just append.
 	o.PoolGroupRefs = append(o.PoolGroupRefs, newPGNode)
-	return
 }
 
 func (o *AviEvhVsNode) DeleteCACertRefInEVHNode(cacertNodeName, key string) {
@@ -392,7 +390,6 @@ func (o *AviEvhVsNode) ReplaceEvhSSLRefInEVHNode(newSslNode *AviTLSKeyCertNode, 
 	}
 	// If we have reached here it means we haven't found a match. Just append.
 	o.SSLKeyCertRefs = append(o.SSLKeyCertRefs, newSslNode)
-	return
 }
 
 func (o *AviEvhVsNode) DeleteSSLRefInEVHNode(sslKeyCertName, key string) {
@@ -516,7 +513,6 @@ func (o *AviEvhVsNode) ReplaceHTTPRefInNodeForEvh(newHttpNode *AviHttpPolicySetN
 	}
 	// If we have reached here it means we haven't found a match. Just append.
 	o.HttpPolicyRefs = append(o.HttpPolicyRefs, newHttpNode)
-	return
 }
 
 // Insecure ingress graph functions below
@@ -630,10 +626,8 @@ func (o *AviObjectGraph) BuildPolicyPGPoolsForEVH(vsNode []*AviEvhVsNode, childN
 			httpPolicySet = append(httpPolicySet, httpPGPath)
 		}
 
-		var poolName string
-		poolName = lib.GetEvhVsPoolNPgName(ingName, namespace, host, path.Path, infraSettingName, path.ServiceName)
 		poolNode := &AviPoolNode{
-			Name:       poolName,
+			Name:       lib.GetEvhVsPoolNPgName(ingName, namespace, host, path.Path, infraSettingName, path.ServiceName),
 			PortName:   path.PortName,
 			Tenant:     lib.GetTenant(),
 			VrfContext: lib.GetVrf(),
@@ -920,7 +914,7 @@ func ProcessSecureHostsForEVH(routeIgrObj RouteIngressModel, key string, parsedI
 				}
 			}
 			hostsMap[host].SecurePolicy = lib.PolicyEdgeTerm
-			if tlssetting.redirect == true {
+			if tlssetting.redirect {
 				hostsMap[host].InsecurePolicy = lib.PolicyRedirect
 			}
 			hostsMap[host].PathSvc = getPathSvc(newPathSvc)
@@ -1020,7 +1014,7 @@ func evhNodeHostName(routeIgrObj RouteIngressModel, tlssetting TlsSettings, ingN
 
 			RemoveRedirectHTTPPolicyInModelForEvh(evhNode, host, key)
 
-			if tlssetting.redirect == true {
+			if tlssetting.redirect {
 				aviModel.(*AviObjectGraph).BuildPolicyRedirectForVSForEvh(evhNode, host, namespace, ingName, key)
 			}
 			// Enable host rule
@@ -1266,8 +1260,7 @@ func (o *AviObjectGraph) ManipulateEvhNode(currentEvhNodeName, ingName, namespac
 			pgName := lib.GetEvhVsPoolNPgName(ingName, namespace, hostname, path, infraSettingName)
 			pgNode := modelEvhNode.GetPGForVSByName(pgName)
 			for _, svc := range services {
-				var evhPool string
-				evhPool = lib.GetEvhVsPoolNPgName(ingName, namespace, hostname, path, infraSettingName, svc)
+				evhPool := lib.GetEvhVsPoolNPgName(ingName, namespace, hostname, path, infraSettingName, svc)
 				o.RemovePoolNodeRefsFromEvh(evhPool, modelEvhNode)
 				o.RemovePoolRefsFromPG(evhPool, pgNode)
 

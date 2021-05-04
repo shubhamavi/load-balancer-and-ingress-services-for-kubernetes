@@ -36,67 +36,70 @@ func (rest *RestOperations) AviHttpPSBuild(hps_meta *nodes.AviHttpPolicySetNode,
 	cksumString := strconv.Itoa(int(cksum))
 	tenant := fmt.Sprintf("/api/tenant/?name=%s", hps_meta.Tenant)
 	cr := lib.AKOUser
+	enable := true
 
 	http_req_pol := avimodels.HTTPRequestPolicy{}
-	hps := avimodels.HTTPPolicySet{Name: &name, CloudConfigCksum: &cksumString,
-		CreatedBy: &cr, TenantRef: &tenant, HTTPRequestPolicy: &http_req_pol}
+	hps := avimodels.HTTPPolicySet{
+		Name:              &name,
+		CloudConfigCksum:  &cksumString,
+		CreatedBy:         &cr,
+		TenantRef:         &tenant,
+		HTTPRequestPolicy: &http_req_pol,
+	}
 
 	if lib.GetGRBACSupport() {
 		hps.Markers = lib.GetMarkers()
 	}
+
 	var idx int32
 	idx = 0
 	for _, hppmap := range hps_meta.HppMap {
-		enable := true
 		name := fmt.Sprintf("%s-%d", hps_meta.Name, idx)
 		match_target := avimodels.MatchTarget{}
 		if len(hppmap.Host) > 0 {
-			var host []string
-			host = hppmap.Host
 			match_crit := "HDR_EQUALS"
-			host_hdr_match := avimodels.HostHdrMatch{
+			match_target.HostHdr = &avimodels.HostHdrMatch{
 				MatchCriteria: &match_crit,
-				Value:         host,
+				Value:         hppmap.Host,
 			}
-			match_target.HostHdr = &host_hdr_match
 		}
 
 		if len(hppmap.Path) > 0 {
-			match_crit := hppmap.MatchCriteria
 			// always match case sensitive
 			match_case := "SENSITIVE"
-			path_match := avimodels.PathMatch{
-				MatchCriteria: &match_crit,
+			match_target.Path = &avimodels.PathMatch{
+				MatchCriteria: &hppmap.MatchCriteria,
 				MatchCase:     &match_case,
 				MatchStr:      hppmap.Path,
 			}
-			match_target.Path = &path_match
 		}
 
 		if hppmap.Port != 0 {
 			match_crit := "IS_IN"
-			vsport_match := avimodels.PortMatch{
+			match_target.VsPort = &avimodels.PortMatch{
 				MatchCriteria: &match_crit,
 				Ports:         []int64{int64(hppmap.Port)},
 			}
-			match_target.VsPort = &vsport_match
 		}
 
 		sw_action := avimodels.HttpswitchingAction{}
 		if hppmap.Pool != "" {
 			action := "HTTP_SWITCHING_SELECT_POOL"
-			sw_action.Action = &action
 			pool_ref := fmt.Sprintf("/api/pool/?name=%s", hppmap.Pool)
-			sw_action.PoolRef = &pool_ref
+			sw_action = avimodels.HttpswitchingAction{
+				Action:  &action,
+				PoolRef: &pool_ref,
+			}
 		} else if hppmap.PoolGroup != "" {
 			action := "HTTP_SWITCHING_SELECT_POOLGROUP"
-			sw_action.Action = &action
 			pg_ref := fmt.Sprintf("/api/poolgroup/?name=%s", hppmap.PoolGroup)
-			sw_action.PoolGroupRef = &pg_ref
+			sw_action = avimodels.HttpswitchingAction{
+				Action:       &action,
+				PoolGroupRef: &pg_ref,
+			}
 		}
 
-		var j int32
-		j = idx
+		j := idx
 		rule := avimodels.HTTPRequestRule{
 			Index:           &j,
 			Enable:          &enable,
@@ -109,54 +112,62 @@ func (rest *RestOperations) AviHttpPSBuild(hps_meta *nodes.AviHttpPolicySetNode,
 	}
 
 	for _, hppmap := range hps_meta.RedirectPorts {
-		enable := true
 		name := fmt.Sprintf("%s-%d", hps_meta.Name, idx)
 		match_target := avimodels.MatchTarget{}
 		if len(hppmap.Hosts) > 0 {
 			match_crit := "HDR_EQUALS"
-			host_hdr_match := avimodels.HostHdrMatch{MatchCriteria: &match_crit,
-				Value: hppmap.Hosts}
-			match_target.HostHdr = &host_hdr_match
+			match_target.HostHdr = &avimodels.HostHdrMatch{
+				MatchCriteria: &match_crit,
+				Value:         hppmap.Hosts,
+			}
 			port_match_crit := "IS_IN"
-			match_target.VsPort = &avimodels.PortMatch{MatchCriteria: &port_match_crit, Ports: []int64{int64(hppmap.VsPort)}}
+			match_target.VsPort = &avimodels.PortMatch{
+				MatchCriteria: &port_match_crit,
+				Ports:         []int64{int64(hppmap.VsPort)},
+			}
 		}
-		redirect_action := avimodels.HTTPRedirectAction{}
+
+		j := idx
 		protocol := "HTTPS"
-		redirect_action.StatusCode = &hppmap.StatusCode
-		redirect_action.Protocol = &protocol
-		redirect_action.Port = &hppmap.RedirectPort
-		var j int32
-		j = idx
-		rule := avimodels.HTTPRequestRule{Enable: &enable, Index: &j,
-			Name: &name, Match: &match_target, RedirectAction: &redirect_action}
+		rule := avimodels.HTTPRequestRule{
+			Enable: &enable,
+			Index:  &j,
+			Name:   &name,
+			Match:  &match_target,
+			RedirectAction: &avimodels.HTTPRedirectAction{
+				StatusCode: &hppmap.StatusCode,
+				Protocol:   &protocol,
+				Port:       &hppmap.RedirectPort,
+			},
+		}
 		http_req_pol.Rules = append(http_req_pol.Rules, &rule)
 		idx = idx + 1
 	}
 	if hps_meta.HeaderReWrite != nil {
-		var hostHdrActionArr []*avimodels.HTTPHdrAction
-		enable := true
 		name := fmt.Sprintf("%s-%d", hps_meta.Name, idx)
 		match_crit := "HDR_EQUALS"
-		host_hdr_match := avimodels.HostHdrMatch{MatchCriteria: &match_crit,
-			Value: []string{hps_meta.HeaderReWrite.SourceHost}}
-		match_target := avimodels.MatchTarget{}
-		match_target.HostHdr = &host_hdr_match
 		replaceHeaderLiteral := "HTTP_REPLACE_HDR"
 		host := "Host"
-		headerVal := avimodels.HTTPHdrValue{Val: &hps_meta.HeaderReWrite.TargetHost}
-		headerData := avimodels.HTTPHdrData{Name: &host, Value: &headerVal}
-		rewriteHeader := avimodels.HTTPHdrAction{}
-		rewriteHeader.Action = &replaceHeaderLiteral
-		rewriteHeader.Hdr = &headerData
-		hostHdrActionArr = append(hostHdrActionArr, &rewriteHeader)
-		var j int32
-		j = idx
+		j := idx
 		rule := avimodels.HTTPRequestRule{
-			Index:     &j,
-			Enable:    &enable,
-			Name:      &name,
-			Match:     &match_target,
-			HdrAction: hostHdrActionArr,
+			Index:  &j,
+			Enable: &enable,
+			Name:   &name,
+			Match: &avimodels.MatchTarget{
+				HostHdr: &avimodels.HostHdrMatch{
+					MatchCriteria: &match_crit,
+					Value:         []string{hps_meta.HeaderReWrite.SourceHost},
+				},
+			},
+			HdrAction: []*avimodels.HTTPHdrAction{{
+				Action: &replaceHeaderLiteral,
+				Hdr: &avimodels.HTTPHdrData{
+					Name: &host,
+					Value: &avimodels.HTTPHdrValue{
+						Val: &hps_meta.HeaderReWrite.TargetHost,
+					},
+				},
+			}},
 		}
 		http_req_pol.Rules = append(http_req_pol.Rules, &rule)
 	}
@@ -165,9 +176,14 @@ func (rest *RestOperations) AviHttpPSBuild(hps_meta *nodes.AviHttpPolicySetNode,
 	var rest_op utils.RestOp
 	if cache_obj != nil {
 		path = "/api/httppolicyset/" + cache_obj.Uuid
-		rest_op = utils.RestOp{Path: path, Method: utils.RestPut, Obj: hps,
-			Tenant: hps_meta.Tenant, Model: "HTTPPolicySet", Version: utils.CtrlVersion}
-
+		rest_op = utils.RestOp{
+			Path:    path,
+			Method:  utils.RestPut,
+			Obj:     hps,
+			Tenant:  hps_meta.Tenant,
+			Model:   "HTTPPolicySet",
+			Version: utils.CtrlVersion,
+		}
 	} else {
 		// Patch an existing http policy set object if it exists in the cache but not associated with this VS.
 		httppol_key := avicache.NamespaceName{Namespace: hps_meta.Tenant, Name: hps_meta.Name}
@@ -175,17 +191,28 @@ func (rest *RestOperations) AviHttpPSBuild(hps_meta *nodes.AviHttpPolicySetNode,
 		if ok {
 			hps_cache_obj, _ := hps_cache.(*avicache.AviHTTPPolicyCache)
 			path = "/api/httppolicyset/" + hps_cache_obj.Uuid
-			rest_op = utils.RestOp{Path: path, Method: utils.RestPut, Obj: hps,
-				Tenant: hps_meta.Tenant, Model: "HTTPPolicySet", Version: utils.CtrlVersion}
+			rest_op = utils.RestOp{
+				Path:    path,
+				Method:  utils.RestPut,
+				Obj:     hps,
+				Tenant:  hps_meta.Tenant,
+				Model:   "HTTPPolicySet",
+				Version: utils.CtrlVersion,
+			}
 		} else {
 			path = "/api/httppolicyset/"
-			rest_op = utils.RestOp{Path: path, Method: utils.RestPost, Obj: hps,
-				Tenant: hps_meta.Tenant, Model: "HTTPPolicySet", Version: utils.CtrlVersion}
+			rest_op = utils.RestOp{
+				Path:    path,
+				Method:  utils.RestPost,
+				Obj:     hps,
+				Tenant:  hps_meta.Tenant,
+				Model:   "HTTPPolicySet",
+				Version: utils.CtrlVersion,
+			}
 		}
 	}
 
-	utils.AviLog.Debug(spew.Sprintf("HTTPPolicySet Restop %v AviHttpPolicySetMeta %v\n",
-		rest_op, *hps_meta))
+	utils.AviLog.Debug("HTTPPolicySet Restop %v AviHttpPolicySetMeta %v\n", rest_op, utils.Stringify(hps_meta))
 	return &rest_op
 }
 
@@ -283,15 +310,12 @@ func (rest *RestOperations) AviHTTPPolicyCacheAdd(rest_op *utils.RestOp, vsKey a
 				vs_cache_obj.AddToHTTPKeyCollection(k)
 				utils.AviLog.Debugf("Modified the VS cache for https object. The cache now is :%v", utils.Stringify(vs_cache_obj))
 			}
-
 		} else {
 			vs_cache_obj := rest.cache.VsCacheMeta.AviCacheAddVS(vsKey)
 			vs_cache_obj.AddToHTTPKeyCollection(k)
-			utils.AviLog.Debug(spew.Sprintf("Added VS cache key during http policy update %v val %v\n", vsKey,
-				vs_cache_obj))
+			utils.AviLog.Debug("Added VS cache key during http policy update %v val %v\n", vsKey, utils.Stringify(vs_cache_obj))
 		}
-		utils.AviLog.Debug(spew.Sprintf("Added Http Policy Set cache k %v val %v\n", k,
-			http_cache_obj))
+		utils.AviLog.Debug("Added Http Policy Set cache k %v val %v\n", k, utils.Stringify(http_cache_obj))
 	}
 
 	return nil

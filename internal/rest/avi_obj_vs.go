@@ -109,8 +109,7 @@ func (rest *RestOperations) AviVsBuild(vs_meta *nodes.AviVsNode, rest_method uti
 			var i int32
 			var vsdatascripts []*avimodels.VSDataScripts
 			for _, ds := range vs_meta.HTTPDSrefs {
-				var j int32
-				j = i
+				j := i
 				dsRef := "/api/vsdatascriptset/?name=" + ds.Name
 				vsdatascript := &avimodels.VSDataScripts{Index: &j, VsDatascriptSetRef: &dsRef}
 				vsdatascripts = append(vsdatascripts, vsdatascript)
@@ -125,8 +124,7 @@ func (rest *RestOperations) AviVsBuild(vs_meta *nodes.AviVsNode, rest_method uti
 			var httpPolicyCollection []*avimodels.HTTPPolicies
 			for _, http := range vs_meta.HttpPolicyRefs {
 				// Update them on the VS object
-				var j int32
-				j = i + 11
+				j := i + 11
 				i = i + 1
 				httpPolicy := fmt.Sprintf("/api/httppolicyset/?name=%s", http.Name)
 				httpPolicies := &avimodels.HTTPPolicies{HTTPPolicySetRef: &httpPolicy, Index: &j}
@@ -329,8 +327,7 @@ func AviVsHttpPSAdd(vs_meta interface{}, isEVH bool) []*avimodels.HTTPPolicies {
 	// from hostrule CRD
 	bufferLen := int32(len(httpPolicyCollection)) + internalPolicyIndexBuffer + 5
 	for i, policy := range httpPSRef {
-		var j int32
-		j = int32(i) + bufferLen
+		j := int32(i) + bufferLen
 		httpPolicy := policy
 		httpPolicies := &avimodels.HTTPPolicies{HTTPPolicySetRef: &httpPolicy, Index: &j}
 		httpPolicyCollection = append(httpPolicyCollection, httpPolicies)

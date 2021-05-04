@@ -46,9 +46,9 @@ func (c *AviCache) AviCacheGetKeyByUuid(uuid string) (interface{}, bool) {
 	c.cache_lock.RLock()
 	defer c.cache_lock.RUnlock()
 	for key, value := range c.cache {
-		switch value.(type) {
+		switch typedValue := value.(type) {
 		case *AviVsCache:
-			if value.(*AviVsCache).Uuid == uuid {
+			if typedValue.Uuid == uuid {
 				return key, true
 			}
 		}

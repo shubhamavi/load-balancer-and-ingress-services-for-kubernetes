@@ -166,7 +166,7 @@ func (rest *RestOperations) AviVsVipBuild(vsvip_meta *nodes.AviVSVIPNode, cache_
 		}
 
 		var east_west bool
-		if vsvip_meta.EastWest == true {
+		if vsvip_meta.EastWest {
 			vip.Subnet = &ew_subnet
 			east_west = true
 		} else {

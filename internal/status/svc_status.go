@@ -102,8 +102,6 @@ func UpdateL4LBStatus(options []UpdateOptions, bulk bool) {
 			}, lib.SyncStatusKey)
 		}
 	}
-
-	return
 }
 
 func updateSvcAnnotations(svc *corev1.Service, updateOption UpdateOptions, oldSvc *corev1.Service, svcHostname string) error {

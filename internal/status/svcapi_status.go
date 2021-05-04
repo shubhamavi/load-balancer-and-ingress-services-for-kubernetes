@@ -85,7 +85,6 @@ func UpdateSvcApiGatewayStatusAddress(options []UpdateOptions, bulk bool) {
 	}
 
 	UpdateL4LBStatus(updateServiceOptions, bulk)
-	return
 }
 
 // getGateways fetches all ingresses and returns a map: {"namespace/name": ingressObj...}
@@ -344,7 +343,6 @@ func UpdateSvcApiGatewayStatusObject(key string, gw *svcapiv1alpha1.Gateway, upd
 	}
 
 	utils.AviLog.Infof("msg: Successfully updated the gateway %s/%s status %+v", gw.Namespace, gw.Name, utils.Stringify(updateStatus))
-	return
 }
 
 func InitializeSvcApiGatewayConditions(gwStatus *svcapiv1alpha1.GatewayStatus, gwSpec *svcapiv1alpha1.GatewaySpec, gwReady bool) {
@@ -400,7 +398,6 @@ func InitializeSvcApiGatewayConditions(gwStatus *svcapiv1alpha1.GatewayStatus, g
 	if len(gwStatus.Addresses) == 0 {
 		gwStatus.Addresses = []svcapiv1alpha1.GatewayAddress{}
 	}
-	return
 }
 
 // do not compare lastTransitionTime updates in gateway

@@ -644,18 +644,12 @@ func TestOshiftHTTPRuleReencryptWithDestinationCA(t *testing.T) {
 
 	integrationtest.SetupHTTPRule(t, rrname, "foo.com", "/")
 	g.Eventually(func() bool {
-		if sniVS.PoolRefs[0].PkiProfile.CACert == "httprule-destinationCA" {
-			return true
-		}
-		return false
+		return sniVS.PoolRefs[0].PkiProfile.CACert == "httprule-destinationCA"
 	}, 50*time.Second).Should(gomega.Equal(true))
 
 	integrationtest.TeardownHTTPRule(t, rrname)
 	g.Eventually(func() bool {
-		if sniVS.PoolRefs[0].PkiProfile.CACert == "abc" {
-			return true
-		}
-		return false
+		return sniVS.PoolRefs[0].PkiProfile.CACert == "abc"
 	}, 50*time.Second).Should(gomega.Equal(true))
 	g.Expect(sniVS.PoolRefs[0].PkiProfile.Name).To(gomega.Equal("cluster--default-foo.com_foo-foo-avisvc-pkiprofile"))
 

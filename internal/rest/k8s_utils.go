@@ -118,5 +118,4 @@ func (rest *RestOperations) SyncObjectStatuses() {
 		status.UpdateL4LBStatus(allServiceLBUpdateOptions, true)
 	}
 	utils.AviLog.Infof("Status syncing completed")
-	return
 }

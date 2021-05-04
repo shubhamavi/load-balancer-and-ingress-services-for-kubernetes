@@ -103,5 +103,4 @@ func checkForInvalidCredentials(uri string, err error) {
 			}
 		}
 	}
-	return
 }

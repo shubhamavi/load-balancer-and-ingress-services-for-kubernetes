@@ -46,24 +46,15 @@ func ExtractTypeNameNamespace(key string) (string, string, string) {
 
 func isServiceLBType(svcObj *corev1.Service) bool {
 	// If we don't find a service or it is not of type loadbalancer - return false.
-	if svcObj.Spec.Type == "LoadBalancer" {
-		return true
-	}
-	return false
+	return svcObj.Spec.Type == "LoadBalancer"
 }
 
 func IsServiceNodPortType(svcObj *corev1.Service) bool {
-	if svcObj.Spec.Type == NodePort {
-		return true
-	}
-	return false
+	return svcObj.Spec.Type == NodePort
 }
 
 func IsServiceClusterIPType(svcObj *corev1.Service) bool {
-	if svcObj.Spec.Type == "ClusterIP" {
-		return true
-	}
-	return false
+	return svcObj.Spec.Type == "ClusterIP"
 }
 
 func GetSvcKeysForNodeCRUD() (svcl4Keys []string, svcl7Keys []string) {

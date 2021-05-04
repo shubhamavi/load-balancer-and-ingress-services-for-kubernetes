@@ -381,7 +381,7 @@ func (o *AviObjectGraph) BuildModelGraphForSNI(routeIgrObj RouteIngressModel, in
 			vsNode[0].SniNodes = append(vsNode[0].SniNodes, sniNode)
 		}
 		RemoveRedirectHTTPPolicyInModel(vsNode[0], sniHost, key)
-		if tlssetting.redirect == true {
+		if tlssetting.redirect {
 			o.BuildPolicyRedirectForVS(vsNode, sniHost, key)
 		}
 		BuildL7HostRule(sniHost, namespace, ingName, key, sniNode)

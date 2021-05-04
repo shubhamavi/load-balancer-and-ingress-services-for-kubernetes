@@ -75,7 +75,6 @@ func UpdateNPLAnnotation(key, namespace, name string) {
 		return
 	}
 	utils.AviLog.Infof("key: %s, msg: updated NPL annotation for Service: %s/%s", key, namespace, name)
-	return
 }
 
 func DeleteNPLAnnotation(key, namespace, name string) {

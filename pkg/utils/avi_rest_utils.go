@@ -31,27 +31,7 @@ type AviRestClientPool struct {
 	AviClient []*clients.AviClient
 }
 
-var AviClientInstance *AviRestClientPool
-var clientonce sync.Once
-
-func SharedAVIClients() *AviRestClientPool {
-	// TODO: Propagate error
-	ctrlUsername := os.Getenv("CTRL_USERNAME")
-	ctrlPassword := os.Getenv("CTRL_PASSWORD")
-	ctrlIpAddress := os.Getenv("CTRL_IPADDRESS")
-
-	if ctrlUsername == "" || ctrlPassword == "" || ctrlIpAddress == "" {
-		AviLog.Fatal(`AVI controller information missing. Update them in kubernetes secret or via environment variables.`)
-	}
-	clientonce.Do(func() {
-		AviClientInstance, _ = NewAviRestClientPool(NumWorkersGraph,
-			ctrlIpAddress, ctrlUsername, ctrlPassword)
-	})
-	return AviClientInstance
-}
-
-func NewAviRestClientPool(num uint32, api_ep string, username string,
-	password string) (*AviRestClientPool, error) {
+func NewAviRestClientPool(num uint32, api_ep string, username string, password string) (*AviRestClientPool, error) {
 	var clientPool AviRestClientPool
 	var wg sync.WaitGroup
 	var globalErr error

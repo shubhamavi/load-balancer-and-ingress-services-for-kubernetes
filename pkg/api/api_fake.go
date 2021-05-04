@@ -43,7 +43,6 @@ func (a *FakeApiServer) initModels() {
 func (a *FakeApiServer) InitApi() {
 	a.initModels()
 	utils.AviLog.Infof("Fake API server now running on port %s", a.Port)
-	return
 }
 
 func (a *FakeApiServer) SetRouter() *mux.Router {

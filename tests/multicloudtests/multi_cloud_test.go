@@ -83,7 +83,7 @@ func waitAndverify(t *testing.T, key string) {
 		} else if data != key {
 			t.Fatalf("error in match expected: %v, got: %v", key, data)
 		}
-	case _ = <-waitChan:
+	case <-waitChan:
 		if key != "" {
 			t.Fatalf("timed out waiting for %v", key)
 		}

@@ -111,11 +111,7 @@ func isNodeUpdated(oldNode, newNode *corev1.Node) bool {
 	}
 
 	nodeLabelEq := reflect.DeepEqual(oldNode.ObjectMeta.Labels, newNode.ObjectMeta.Labels)
-	if !nodeLabelEq {
-		return true
-	}
-
-	return false
+	return !nodeLabelEq
 }
 
 // Consider an ingress has been updated only if spec/annotation is updated
@@ -145,11 +141,7 @@ func isRouteUpdated(oldRoute, newRoute *routev1.Route) bool {
 	oldSpecHash := utils.Hash(utils.Stringify(oldRoute.Spec))
 	newSpecHash := utils.Hash(utils.Stringify(newRoute.Spec))
 
-	if oldSpecHash != newSpecHash {
-		return true
-	}
-
-	return false
+	return oldSpecHash != newSpecHash
 }
 
 func isNamespaceUpdated(oldNS, newNS *corev1.Namespace) bool {
@@ -158,11 +150,9 @@ func isNamespaceUpdated(oldNS, newNS *corev1.Namespace) bool {
 	}
 	oldLabelHash := utils.Hash(utils.Stringify(oldNS.Labels))
 	newLabelHash := utils.Hash(utils.Stringify(newNS.Labels))
-	if oldLabelHash != newLabelHash {
-		return true
-	}
-	return false
+	return oldLabelHash != newLabelHash
 }
+
 func AddIngressFromNSToIngestionQueue(numWorkers uint32, c *AviController, namespace string, msg string) {
 	ingObjs, err := utils.GetInformers().IngressInformer.Lister().Ingresses(namespace).List(labels.Set(nil).AsSelector())
 	if err != nil {
@@ -177,6 +167,7 @@ func AddIngressFromNSToIngestionQueue(numWorkers uint32, c *AviController, names
 	}
 
 }
+
 func AddRoutesFromNSToIngestionQueue(numWorkers uint32, c *AviController, namespace string, msg string) {
 	routeObjs, err := utils.GetInformers().RouteInformer.Lister().Routes(namespace).List(labels.Set(nil).AsSelector())
 	if err != nil {
@@ -191,6 +182,7 @@ func AddRoutesFromNSToIngestionQueue(numWorkers uint32, c *AviController, namesp
 	}
 
 }
+
 func AddServicesFromNSToIngestionQueue(numWorkers uint32, c *AviController, namespace string, msg string) {
 	// For Advancd L4 and service api , do not handle. services already been taken care
 	// in service handler
@@ -218,8 +210,8 @@ func AddServicesFromNSToIngestionQueue(numWorkers uint32, c *AviController, name
 		c.workqueue[bkt].AddRateLimited(key)
 		utils.AviLog.Debugf("key: %s, msg: %s for namespace: %s", key, msg, namespace)
 	}
-
 }
+
 func AddGatewaysFromNSToIngestionQueue(numWorkers uint32, c *AviController, namespace string, msg string) {
 	//TODO: Add code for gateway
 	gatewayObjs, err := lib.GetSvcAPIInformers().GatewayInformer.Lister().Gateways(namespace).List(labels.Set(nil).AsSelector())
@@ -1150,10 +1142,7 @@ func (c *AviController) Start(stopCh <-chan struct{}) {
 
 func isServiceLBType(svcObj *corev1.Service) bool {
 	// If we don't find a service or it is not of type loadbalancer - return false.
-	if svcObj.Spec.Type == "LoadBalancer" {
-		return true
-	}
-	return false
+	return svcObj.Spec.Type == "LoadBalancer"
 }
 
 // Run will set up the event handlers for types we are interested in, as well

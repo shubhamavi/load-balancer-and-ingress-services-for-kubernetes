@@ -82,8 +82,6 @@ func UpdateIngressStatus(options []UpdateOptions, bulk bool) {
 			}}, true, lib.SyncStatusKey)
 		}
 	}
-
-	return
 }
 
 func updateObject(mIngress *networkingv1beta1.Ingress, updateOption UpdateOptions, retryNum ...int) error {
@@ -223,10 +221,7 @@ func updateIngAnnotations(mClient kubernetes.Interface, ingObj *networkingv1beta
 func isAnnotationsUpdateRequired(ingAnnotations map[string]string, newVSAnnotations map[string]string) bool {
 	oldVSAnnotationsStr, ok := ingAnnotations[VSAnnotation]
 	if !ok {
-		if len(newVSAnnotations) > 0 {
-			return true
-		}
-		return false
+		return len(newVSAnnotations) > 0
 	}
 
 	var oldVSAnnotations map[string]string
@@ -517,7 +512,7 @@ func getIngresses(ingressNSNames []string, bulk bool, retryNum ...int) map[strin
 					if _, ok := aviIngClasses[*ingressList.Items[i].Spec.IngressClassName]; ok {
 						returnIng = true
 					}
-				} else if _, ok := lib.IsAviLBDefaultIngressClassWithClient(mClient); ok {
+				} else if _, ok := lib.IsAviLBDefaultIngressClass(); ok {
 					returnIng = true
 				}
 			} else {

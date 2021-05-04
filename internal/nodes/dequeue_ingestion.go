@@ -279,11 +279,7 @@ func isGatewayDelete(gatewayKey string, key string) bool {
 		}
 	}
 	found, _ := objects.ServiceGWLister().GetGWListeners(namespace + "/" + gwName)
-	if !found {
-		return true
-	}
-
-	return false
+	return !found
 }
 
 func handleRoute(key string, fullsync bool, routeNames []string) {
@@ -295,7 +291,6 @@ func handleRoute(key string, fullsync bool, routeNames []string) {
 		utils.AviLog.Infof("key: %s, msg: processing route: %s", key, route)
 		HostNameShardAndPublish(utils.OshiftRoute, nameroute, nsroute, key, fullsync, sharedQueue)
 	}
-	return
 }
 
 func handleL4Service(key string, fullsync bool) {
@@ -385,7 +380,7 @@ func getIngressNSNameForIngestion(objType, namespace, nsname string) (string, st
 
 func saveAviModel(model_name string, aviGraph *AviObjectGraph, key string) bool {
 	utils.AviLog.Debugf("key: %s, msg: Evaluating model :%s", key, model_name)
-	if lib.DisableSync == true {
+	if lib.DisableSync {
 		// Note: This is not thread safe, however locking is expensive and the condition for locking should happen rarely
 		utils.AviLog.Infof("key: %s, msg: Disable Sync is True, model %s can not be saved", key, model_name)
 		return false

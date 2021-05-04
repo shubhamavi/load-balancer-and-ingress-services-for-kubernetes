@@ -256,6 +256,4 @@ func BuildPoolHTTPRule(host, path, ingName, namespace, key string, vsNode AviVsE
 			}
 		}
 	}
-
-	return
 }

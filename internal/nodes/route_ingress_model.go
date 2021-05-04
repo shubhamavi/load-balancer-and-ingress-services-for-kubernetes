@@ -118,10 +118,7 @@ func (or *OshiftRouteModel) ParseHostPath() IngressConfig {
 }
 
 func (m *OshiftRouteModel) Exists() bool {
-	if m.GetSpec() != nil {
-		return true
-	}
-	return false
+	return m.GetSpec() != nil
 }
 
 func (m *OshiftRouteModel) GetDiffPathSvc(storedPathSvc map[string][]string, currentPathSvc []IngressHostPathSvc, checkSvc bool) map[string][]string {
@@ -200,10 +197,7 @@ func (m *K8sIngressModel) ParseHostPath() IngressConfig {
 }
 
 func (m *K8sIngressModel) Exists() bool {
-	if m.GetSpec() != nil {
-		return true
-	}
-	return false
+	return m.GetSpec() != nil
 }
 
 func (m *K8sIngressModel) GetDiffPathSvc(storedPathSvc map[string][]string, currentPathSvc []IngressHostPathSvc, checkSvc bool) map[string][]string {

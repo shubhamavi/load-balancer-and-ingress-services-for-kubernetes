@@ -176,8 +176,6 @@ func checkSvcForSvcApiGatewayPortConflict(svc *corev1.Service, key string) {
 
 	// detect unsupported protocol
 	// TODO
-
-	return
 }
 
 // SetupServicesApi handles setting up of ServicesAPI event handlers
@@ -338,6 +336,4 @@ func (c *AviController) SetupSvcApiEventHandlers(numWorkers uint32) {
 			},
 		},
 	)
-
-	return
 }
